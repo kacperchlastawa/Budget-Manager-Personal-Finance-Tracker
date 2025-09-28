@@ -17,8 +17,7 @@ class SavingGoal:
     def withdraw(self, amount : float, description : str, date = None):
         self.transactions.append((- amount, description, date))
         self.amount -= amount
-        
-    
+
     def get_balance(self):
         return self.amount
     
@@ -41,6 +40,7 @@ class SavingGoal:
         self.goal_amount = data["goal_amount"]
         self.transactions = data["transactions"]
 
+#####
 
 class Savings:
     def __init__(self):
