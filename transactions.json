@@ -1,0 +1,16 @@
+[
+    {
+        "amount": 300,
+        "date": "2025-01-01",
+        "category": "Gift",
+        "description": "Present",
+        "type": "income"
+    },
+    {
+        "amount": 100,
+        "date": "2025-01-02",
+        "category": "Transport",
+        "description": "Bus",
+        "type": "expense"
+    }
+]
