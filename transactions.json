@@ -1,65 +1,16 @@
 [
     {
-        "amount": 300,
-        "date": "2025-01-01",
-        "category": "Gift",
-        "description": "Present",
-        "type": "income"
-    },
-    {
-        "amount": 100,
-        "date": "2025-01-02",
-        "category": "Transport",
-        "description": "Bus",
-        "type": "expense"
-    },
-    {
-        "amount": 3500.0,
+        "amount": 1000.0,
         "date": "2025-09-29",
         "category": "Work",
-        "description": "For September - salary",
+        "description": "month-salary",
         "type": "income"
     },
     {
-        "amount": 207.0,
-        "date": "2025-09-29",
-        "category": "Music",
-        "description": "Vinyls - arctic monkeys",
-        "type": "expense"
-    },
-    {
-        "amount": 50.0,
-        "date": "2025-09-29",
-        "category": "Savings: Trip to Barcelona",
-        "description": "zbieramy dalej",
-        "type": "expense"
-    },
-    {
-        "amount": 1000.0,
-        "date": "2025-09-29",
-        "category": "Savings: Trip to Barcelona",
-        "description": "Unfortunetely I had to buy something",
-        "type": "income"
-    },
-    {
-        "amount": 1000.0,
-        "date": "2025-09-29",
-        "category": "mom",
-        "description": "gift from mom",
-        "type": "income"
-    },
-    {
-        "amount": 250.0,
+        "amount": 100.0,
         "date": "2025-09-29",
         "category": "Savings: Trip to Ireland",
-        "description": "Adding cause i want ",
+        "description": "Adding some moneeyyy",
         "type": "expense"
-    },
-    {
-        "amount": 30.0,
-        "date": "2025-09-29",
-        "category": "Savings: Trip to Ireland",
-        "description": "for dinner",
-        "type": "income"
     }
 ]

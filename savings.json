@@ -2,7 +2,7 @@
     "goals": [
         {
             "name": "Trip to Ireland",
-            "amount": 220.0,
+            "amount": 320.0,
             "goal_amount": 1000.0,
             "transactions": [
                 [
@@ -14,8 +14,19 @@
                     -30.0,
                     "for dinner",
                     null
+                ],
+                [
+                    100.0,
+                    "Adding some moneeyyy",
+                    null
                 ]
             ]
+        },
+        {
+            "name": "Trip to Barcelona",
+            "amount": 0,
+            "goal_amount": 1500.0,
+            "transactions": []
         }
     ]
 }

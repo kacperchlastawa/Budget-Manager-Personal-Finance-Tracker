@@ -107,17 +107,5 @@ class Savings:
             goal.transactions = goal_data.get("transactions",[])
             self.goals.append(goal)
     
-    def save_to_file(self, filename = 'savings.json'):
-        with open(filename, 'w',encoding= "utf-8") as file:
-            json.dump(self.to_dict(), file, ensure_ascii=False, indent=4)
-
-    def load_from_file(self, filename = 'savings.json'):
-        try:
-            with open(filename, 'r') as file:
-                data = json.load(file)
-                self.from_dict(data)
-        except FileNotFoundError:
-            print(f"No existing savings data found in {filename}. Starting with an empty list.")
-            self.goals = []
 
     

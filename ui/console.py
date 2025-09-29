@@ -1,7 +1,7 @@
 from models.transaction import  Income, Expense
 from models.budget import Budget
 from models.savings import Savings, SavingGoal
-import json 
+from data.storage import save_to_file, load_from_file
 from datetime import date
 
 
@@ -20,7 +20,7 @@ def add_income(budget):
     description = input("Enter description: ")
     income = Income(amount, t_date, category, description)
     budget.add_transaction(income)
-    budget.save_data('transactions.json')
+    save_to_file(budget,'transactions.json')
 
 def add_expense(budget):
     amount = float(input("Enter amount: "))
@@ -32,7 +32,7 @@ def add_expense(budget):
     description = input("Enter description: ")
     expense = Expense(amount, t_date, category, description)
     budget.add_transaction(expense)
-    budget.save_data('transactions.json')
+    save_to_file(budget, 'transactions.json')
 
 def show_transactions(budget):
     if not budget.get_transactions():
@@ -73,7 +73,7 @@ def add_savings_goal(savings):
         print("Goal amount must be greater than 0.")
         return
     savings.add_goal(goal_name, goal_amount)
-    savings.save_to_file('savings.json')
+    save_to_file(savings,'savings.json')
     print("Savings goal added successfully.")
 
 def add_money_to_goal(savings, budget):
@@ -84,11 +84,11 @@ def add_money_to_goal(savings, budget):
             print("Not enough balance in the budget")
             return False
     if savings.add_to_goal(goal_name, amount, description):
-        savings.save_to_file('savings.json')
+        save_to_file(savings,'savings.json')
         print("Money added to goal successfully.")
         expense = Expense(amount, date.today().isoformat(), f"Savings: {goal_name}", description)
         budget.add_transaction(expense)
-        budget.save_data('transactions.json')
+        save_to_file(budget, 'transactions.json')
     else:
         print("Failed to add money to goal.")
 
@@ -97,11 +97,11 @@ def withdraw_money_from_goal(savings, budget):
     amount = float(input("Enter amount to withdraw: "))
     description = input("Enter description: ")
     if savings.withdraw_from_goal(goal_name, amount, description):
-        savings.save_to_file('savings.json')
+        save_to_file(savings,'savings.json')
         print("Money withdrawn from goal successfully.")
         income = Income(amount, date.today().isoformat(), f"Savings: {goal_name}", description)
         budget.add_transaction(income)
-        budget.save_data('transactions.json')
+        save_to_file(budget,'transactions.json')
     else:
         print("Failed to withdraw money from goal.")
 
@@ -133,10 +133,10 @@ def remove_goal(savings, budget):
                 f"Funds returned from goal '{goal_name}'"
             )
             budget.add_transaction(income)
-            budget.save_data('transactions.json')
+            save_to_file(budget, 'transactions.json')
             print(f"Returned {remaining} from '{goal_name}' back to budget.")
         if savings.remove_goal(goal_name):
-            savings.save_to_file('savings.json')
+            save_to_file(savings, 'savings.json')
             print("Goal removed successfully.")
     else:
         print("Goal not found.")
@@ -188,9 +188,9 @@ def menu(budget, savings):
         elif choice == '12':
             remove_goal(savings, budget)
         elif choice == '13':
-            budget.save_data('transactions.json')
-            savings.save_to_file('savings.json')
-            print("Exiting...")
+            save_to_file(budget, 'transactions.json')
+            save_to_file(savings,'savings.json')
+            print("Data saved. Exiting...")
             break
         else:
             print("Invalid choice. Please try again.")

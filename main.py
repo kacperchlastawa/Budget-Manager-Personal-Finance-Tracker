@@ -1,14 +1,10 @@
-from models.transaction import  Income, Expense
 from models.budget import Budget
-from models.savings import Savings, SavingGoal
-import json 
-from datetime import date
+from models.savings import Savings
 from ui.console import *
+from data.storage import save_to_file, load_from_file
 
-budget = Budget()
-budget.load_data('transactions.json')
-savings = Savings()
-savings.load_from_file('savings.json')
+budget = load_from_file(Budget, 'transactions.json')
+savings = load_from_file(Savings,'savings.json')
 
 menu(budget, savings)
 
