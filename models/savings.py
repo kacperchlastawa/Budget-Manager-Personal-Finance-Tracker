@@ -1,5 +1,6 @@
 import json
-
+from .budget import Budget
+budget = Budget()
 class SavingGoal:
     def __init__(self, name: str, amount: float, goal_amount: float): 
         self.amount = amount
@@ -10,12 +11,12 @@ class SavingGoal:
         progress = (self.amount / self.goal_amount * 100) if self.goal_amount else 0
         return (f"SavingGoal(name='{self.name}', amount={self.amount}, "f"goal_amount={self.goal_amount}, progress={progress:.2f}%)")
 
-    def add(self, amount : float, description : str, date = None):
-        self.transactions.append((amount, description, date))
+    def add(self, amount : float, description : str, t_date = None):
+        self.transactions.append((amount, description, t_date))
         self.amount += amount
     
-    def withdraw(self, amount : float, description : str, date = None):
-        self.transactions.append((- amount, description, date))
+    def withdraw(self, amount : float, description : str, t_date = None):
+        self.transactions.append((- amount, description, t_date))
         self.amount -= amount
 
     def get_balance(self):
@@ -47,6 +48,9 @@ class Savings:
         self.goals = []    
     
     def add_goal(self, goal_name:str, goal_amount:float):
+        if goal_amount <= 0: 
+            print("Goal amount must be greater than zero") 
+            return
         new_goal = SavingGoal(goal_name, 0, goal_amount)
         self.goals.append(new_goal)
     
@@ -67,19 +71,22 @@ class Savings:
         print("Goal not found")
         return None
             
-    def add_to_goal(self, goal_name : str, amount: float, description : str, date = None):
+    def add_to_goal(self, goal_name : str, amount: float, description : str, t_date = None):
         goal = self.get_goal(goal_name)
         if goal:
-            goal.add(amount, description, date)
+            goal.add(amount, description, t_date)
             return True
         else:
             print("Goal not found")
             return False
         
-    def withdraw_from_goal(self, goal_name : str, amount: float, description : str, date =  None):
+    def withdraw_from_goal(self, goal_name : str, amount: float, description : str, t_date =  None):
         goal = self.get_goal(goal_name)
         if goal:
-            goal.withdraw(amount, description, date)
+            if goal.get_balance() < amount:
+                print("Not enough balance in the goal")
+                return False
+            goal.withdraw(amount, description, t_date)
             return True
         else:
             print("Goal not found")

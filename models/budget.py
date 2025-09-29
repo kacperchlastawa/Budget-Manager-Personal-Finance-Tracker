@@ -1,4 +1,4 @@
-from transaction import Income, Expense, Transaction
+from .transaction import Income, Expense, Transaction
 import json
 class Budget:
 
@@ -6,6 +6,10 @@ class Budget:
         self.transactions = []
     
     def add_transaction(self, transaction):
+        if isinstance(transaction, Expense):
+            if transaction.amount > self.get_balance():
+                print("Not enough balance for this expense.")
+                return False
         self.transactions.append(transaction)
 
     def get_balance(self):
