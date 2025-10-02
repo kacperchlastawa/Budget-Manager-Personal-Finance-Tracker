@@ -1,74 +1,54 @@
 from .transaction import Income, Expense, Transaction
+from data.budget_db import *
 class Budget:
 
     def __init__(self):
-        self.transactions = []
+        pass
     
     def add_transaction(self, transaction):
         if isinstance(transaction, Expense):
             if transaction.amount > self.get_balance():
                 print("Not enough balance for this expense.")
                 return False
-        self.transactions.append(transaction)
+        insert_transaction(transaction)
 
     def get_balance(self):
-        balance = 0 
-        for transaction in self. transactions:
-            if isinstance(transaction,Income):
-                balance += transaction.amount
-            elif isinstance(transaction,Expense):
-                balance -= transaction.amount
+        balance = get_balance()
         return balance
-    def get_transactions(self):
-        return self.transactions
-
-    def get_income(self):
-        incomes = []
-        for transaction in self.transactions:
-            if isinstance(transaction, Income):
-                incomes.append(transaction)
-        return incomes
     
-    def get_expenses(self):
-        expenses = []
-        for transaction in self.transactions:
-            if isinstance(transaction, Expense):
-                expenses.append(transaction)
-        return expenses
+    def get_transactions(self):
+        self.transactions = []
+        rows = get_transactions()
+        for row in rows:
+            _,t_type, amount, date, category, description = row 
+            if t_type == 'income':
+                transaction = Income(amount, date, category, description)
+            elif t_type == 'expense':
+                transaction = Expense(amount, date, category, description)
+            self.transactions.append(transaction)
+        return self.transactions
     
 
     def filter_by_category(self, category):
         filtered = []
-        for transaction in self.transactions:
-            if transaction.category == category:
-                filtered.append(transaction)
-        return filtered
+        filtered = filter_transactions_by_category(category)
+        transactions = []
+        for row in filtered:
+            _,t_type, amount, date, category, description = row 
+            if t_type == 'income':
+                transaction = Income(amount, date, category, description)
+            elif t_type == 'expense':
+                transaction = Expense(amount, date, category, description)
+            transactions.append(transaction)
+        return transactions
     
     def total_by_type(self, transaction_type):
         total = 0
-        for transaction in self.transactions:
-            if isinstance(transaction, transaction_type):
-                total += transaction.amount
+        if transaction_type.type == 'income':
+            t_type = 'income'
+        
+        elif transaction_type.type == 'expense':
+            t_type = 'expense'
+        total = get_transaction_by_type(t_type)
         return total
     
-    def to_dict(self):
-        return [t.to_dict() for t in self.transactions]
-    
-    def from_dict(self, data):
-        self.transactions = []
-        for item in data:
-            if item['type'] == 'income':
-                transaction = Income(
-                    item['amount'],
-                    item['date'],
-                    item['category'],
-                    item['description']
-                )
-            elif item['type'] == 'expense':
-                transaction = Expense(
-                    item['amount'],
-                    item['date'],
-                    item['category'],
-                    item['description']
-                )
-            self.transactions.append(transaction)
