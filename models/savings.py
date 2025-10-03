@@ -19,7 +19,7 @@ class SavingGoal:
         update_goal_amount(self.name, self.amount)
         rows = get_goal_by_name(self.name)
         goal_id = rows[0]
-        insert_transaction(goal_id,amount, t_date, description)
+        insert_transaction(goal_id,+ amount, t_date, description)
 
             
         
@@ -65,14 +65,15 @@ class Savings:
             return False
     
     def get_goal(self, goal_name : str):
-        goals = get_goals()
-        for row in goals:
-            _, name, amount, goal_amount = row
-            if name == goal_name:
-                goal = SavingGoal(name, amount, goal_amount)
-                return goal
-        print("Goal not found")
-        return False
+        goal = get_goal_by_name(goal_name)
+        
+        if goal:
+            _, name, amount, goal_amount = goal
+            goal = SavingGoal(name, amount, goal_amount)
+            return goal
+        else:
+            print("Goal not found")
+            return False
             
     def add_to_goal(self, goal_name : str, amount: float, description : str, t_date = None):
         goal_row = get_goal_by_name(goal_name)
@@ -89,7 +90,7 @@ class Savings:
         goal_row = get_goal_by_name(goal_name)
         if goal_row:
             goal = SavingGoal(goal_row[1], goal_row[2], goal_row[3])
-            if goal.get_balance() < amount:
+            if goal.amount < amount:
                 print("Not enough balance in the goal")
                 return False
             goal.withdraw(amount, description, t_date)

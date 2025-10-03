@@ -53,7 +53,7 @@ def get_balance():
     cursor = conn.cursor()
     cursor.execute("""
         SELECT 
-               (i-e) as balance,
+               (i-e) as balance
         FROM ( 
            SELECT 
                 ISNULL(SUM(CASE WHEN type='income' THEN amount ELSE 0 END), 0) as i,
@@ -70,7 +70,19 @@ def get_balance():
 def filter_transactions_by_category(category):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT SUM(amount) FROM Transactions WHERE LOWER(category) = ?", (category))
+    cursor.execute("SELECT * FROM Transactions WHERE LOWER(category) = ?", (category,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return rows
+
+
+def total_by_transaction_type(t_type):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+                    SELECT SUM(amount) FROM Transactions WHERE type = ?
+                   """, (t_type))
     result = cursor.fetchone()
     cursor.close()
     conn.close()

@@ -1,7 +1,6 @@
 from models.transaction import  Income, Expense
 from models.budget import Budget
 from models.savings import Savings, SavingGoal
-from data.storage import save_to_file, load_from_file
 from datetime import date
 
 #Budget
@@ -40,7 +39,7 @@ def show_transactions(budget):
         print(transaction)
     
 #todo: function tgat remembers its last state
-def get_balance(budget):
+def show_balance(budget):
     balance = budget.get_balance()
     print(f"Current balance: {balance}")
 
@@ -50,6 +49,14 @@ def filtered_by_category(budget):
     if not filtered:
         print(f"No transactions found in category '{category}'.")
         return
+    for transaction in filtered:
+        print(transaction)
+def transactions_by_type(budget):
+    transaction_type = input("Enter transaction type (income/expense): ").strip().lower()
+    if transaction_type not in ('income', 'expense'):
+        print("Invalid transaction type. Please enter 'income' or 'expense'.")
+        return
+    filtered = budget.transactions_by_type(transaction_type)
     for transaction in filtered:
         print(transaction)
 
@@ -93,15 +100,12 @@ def withdraw_money_from_goal(savings, budget):
     description = input("Enter description: ")
     t_date = input("Enter date (YYYY-MM-DD)")
     if savings.withdraw_from_goal(goal_name, amount, description):
-        income = Income(amount, date.today().isoformat(), f"Savings: {goal_name}", description)
+        income = Income(amount, t_date, f"Savings: {goal_name}", description)
         budget.add_transaction(income)
     else:
         print("Failed to withdraw money from goal.")
 
 def show_savings_goals(savings):
-    if not savings.goals:
-        print("No savings goals found.")
-        return
     savings.show_goals()
 
 def show_goal_progress(savings):
@@ -111,13 +115,13 @@ def show_goal_progress(savings):
         progress = (goal.amount / goal.goal_amount) * 100 if goal.goal_amount > 0 else 0
         print(f"Progress for '{goal.name}': {goal.amount}/{goal.goal_amount} ({progress:.2f}%)")
     else:
-        print("Goal not found.")
+        return 
 
 def remove_goal(savings, budget):
     goal_name = input("Enter goal name to remove: ")
     goal = savings.get_goal(goal_name)
     if goal:
-        remaining = goal.get_balance()
+        remaining = goal.amount
         if remaining > 0:
             income = Income(
                 remaining,
@@ -142,15 +146,16 @@ def menu(budget, savings):
         print("4. Show balance")
         print("5. Filter by category")
         print("6.Total by type (income/expense)\n")
+        print("7.Filter by type of transaction (income/expense)")
         print("---- Savings Menu ----")
-        print("7. Add savings goal")
-        print("8. Add money to goal")
-        print("9. Withdraw money from goal")
-        print("10. Show savings goals")
-        print("11. Show progress of a goal")
-        print("12. Remove a goal")
+        print("8. Add savings goal")
+        print("9. Add money to goal")
+        print("10. Withdraw money from goal")
+        print("11. Show savings goals")
+        print("12. Show progress of a goal")
+        print("13. Remove a goal")
         print("------------------------")
-        print("13. Exit")
+        print("14. Exit")
         choice = input("Enter your choice: ")
 
         if choice == '1':
@@ -160,26 +165,26 @@ def menu(budget, savings):
         elif choice == '3':
             show_transactions(budget)
         elif choice == '4':
-            get_balance(budget)
+            show_balance(budget)
         elif choice == '5':
             filtered_by_category(budget)
         elif choice == '6':
             total_by_type(budget)
         elif choice == '7':
-            add_savings_goal(savings)
+            transactions_by_type(budget)
         elif choice == '8':
-            add_money_to_goal(savings, budget)
+            add_savings_goal(savings)
         elif choice == '9':
-            withdraw_money_from_goal(savings, budget)
+            add_money_to_goal(savings, budget)
         elif choice == '10':
-            show_savings_goals(savings)
+            withdraw_money_from_goal(savings, budget)
         elif choice == '11':
-            show_goal_progress(savings)
+            show_savings_goals(savings)
         elif choice == '12':
-            remove_goal(savings, budget)
+            show_goal_progress(savings)
         elif choice == '13':
-            save_to_file(budget, 'transactions.json')
-            save_to_file(savings,'savings.json')
+            remove_goal(savings, budget)
+        elif choice == '14':
             print("Data saved. Exiting...")
             break
         else:

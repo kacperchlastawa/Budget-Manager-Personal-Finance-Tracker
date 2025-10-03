@@ -42,13 +42,18 @@ class Budget:
             transactions.append(transaction)
         return transactions
     
+    def transactions_by_type(self,t_type):
+        filtered = []
+        rows = get_transaction_by_type(t_type)
+        for row in rows:
+            _,transaction_type,amount,date,category,description = row
+            if t_type == 'income':
+                filtered.append(Income(amount,date,category,description))
+            elif t_type == 'expense':
+                filtered.append(Expense(amount,date,category,description))
+        return filtered
     def total_by_type(self, transaction_type):
         total = 0
-        if transaction_type.type == 'income':
-            t_type = 'income'
-        
-        elif transaction_type.type == 'expense':
-            t_type = 'expense'
-        total = get_transaction_by_type(t_type)
+        total = total_by_transaction_type(transaction_type)
         return total
     
