@@ -77,13 +77,23 @@ def update_goal_amount(goal_name, new_amount):
     cursor.close()
     conn.close()
 
-def insert_transaction(goal_id,amount, t_date, description):
+def insert_savings_transaction(goal_id,amount, t_date, description):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
                 INSERT INTO SavingTransactions(goal_id,amount,date,description)
                    VALUES(?,?,?,?)
                    """,(goal_id,amount,t_date,description))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+def delete_transactions(goal_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+                    DELETE FROM SavingTransactions WHERE goal_id = ?
+                   """, (goal_id,))
     conn.commit()
     cursor.close()
     conn.close()

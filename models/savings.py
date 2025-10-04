@@ -19,7 +19,7 @@ class SavingGoal:
         update_goal_amount(self.name, self.amount)
         rows = get_goal_by_name(self.name)
         goal_id = rows[0]
-        insert_transaction(goal_id,+ amount, t_date, description)
+        insert_savings_transaction(goal_id,+ amount, t_date, description)
 
             
         
@@ -30,7 +30,7 @@ class SavingGoal:
         update_goal_amount(self.name, self.amount)
         rows = get_goal_by_name(self.name)
         goal_id = rows[0]
-        insert_transaction(goal_id,- amount, t_date, description)
+        insert_savings_transaction(goal_id,- amount, t_date, description)
 
     def get_balance(self):
         return self.amount
@@ -56,6 +56,9 @@ class Savings:
         
 
     def remove_goal(self, goal_name : str):
+        rows = get_goal_by_name(goal_name)
+        goal_id = rows[0]
+        delete_transactions(goal_id)
         delete_goal(goal_name)
         if get_goal_by_name(goal_name) is None:
             print(f"Goal '{goal_name}' removed successfully.")

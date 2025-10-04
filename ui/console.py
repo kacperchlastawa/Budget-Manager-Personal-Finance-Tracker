@@ -83,7 +83,7 @@ def add_money_to_goal(savings, budget):
     goal_name = input("Enter goal name: ")
     amount = float(input("Enter amount to add: "))
     description = input("Enter description: ")
-    t_date = input("Enter date (YYYY-MM-DD)")
+    t_date = input("Enter date (YYYY-MM-DD): ")
     if budget.get_balance() < amount:
             print("Not enough balance in the budget")
             return False
@@ -145,8 +145,8 @@ def menu(budget, savings):
         print("3. Show all transactions")
         print("4. Show balance")
         print("5. Filter by category")
-        print("6.Total by type (income/expense)\n")
-        print("7.Filter by type of transaction (income/expense)")
+        print("6.Total by type (income/expense)")
+        print("7.Filter by type of transaction (income/expense)\n")
         print("---- Savings Menu ----")
         print("8. Add savings goal")
         print("9. Add money to goal")

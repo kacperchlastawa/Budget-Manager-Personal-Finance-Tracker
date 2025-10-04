@@ -25,7 +25,7 @@ def insert_transaction(obj):
     cursor.execute("""
         INSERT INTO Transactions (type,amount, date, category, description)
         VALUES (?,?, ?, ?, ?)
-    """, (obj.type,obj.amount, obj.date, obj.category, obj.description))
+    """, (obj.type,obj.amount, obj.t_date, obj.category, obj.description))
     conn.commit()
     cursor.close()
     conn.close()
