@@ -1,0 +1,13 @@
+data     models       __pycache__       services  venv
+main.py  notatki.txt  requirements.txt  ui
+
+./data:
+budget_db.py  conection.py  __pycache__  savings_db.py  storage.py
+./models:
+budget.py  __pycache__  savings.py  transaction.py  user.py
+
+./services:
+api.py  report.py  visualization.py
+
+./ui:
+console.py  gui.py  __pycache__
