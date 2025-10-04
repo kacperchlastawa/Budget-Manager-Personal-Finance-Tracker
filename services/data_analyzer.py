@@ -5,7 +5,7 @@ import pandas as pd
 def get_transactions_by_category():
     rows = total_transaction_by_category()
     if not rows:
-        return pd.DataFrame(columns=['category','TotalAmount','count'])
+        return pd.DataFrame(columns=['category','total','count'])
     
     data = []
     for row in rows:
@@ -68,6 +68,35 @@ def get_monthly_summary(year,month):
         }
 
 def get_savings_progress():
-    pass
-def get_top_expenses():
-    pass
+    rows = get_goals()
+    progress_list = []
+    if not rows:
+        return pd.DataFrame(columns=['goal_name', 'amount', 'goal_amount', 'progress'])
+    for row in rows :
+        name = row[1]
+        current = row[2]
+        target = row[3]
+        if target > 0:
+            progress = round((current/target)*100,2)
+        else:
+            progress = 0.0
+
+        progress_list.append({
+            'goal_name': name,
+            'current_amount': float(current),
+            'goal_amount': float(target),
+            'progress': progress
+        })
+    return pd.DataFrame(progress_list)
+
+def get_top_expenses(limit = 5):
+    expenses = get_top_expenses_from_db()
+    top_expenses = []
+    if not expenses:
+        return pd.DataFrame(columns=['category', 'total_expense'])
+    for row in expenses[:limit]:
+        top_expenses.append({
+            'category': row[0],
+            'total_expense': float(row[1])
+        })
+    return pd.DataFrame(top_expenses)

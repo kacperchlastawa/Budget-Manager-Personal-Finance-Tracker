@@ -70,7 +70,7 @@ def get_balance():
 def filter_transactions_by_category(category):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Transactions WHERE LOWER(category) = ?", (category,))
+    cursor.execute("SELECT * FROM Transactions WHERE LOWER(category) = LOWER(?)", (category,))
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -124,15 +124,15 @@ def balance_over_time(period):
 def income_vs_expense(limit):
     conn = get_connection()
     cursor = conn.cursor() 
-    cursor.execute("""
-                    SELECT TOP ?
+    cursor.execute(f"""
+                    SELECT TOP ({limit})
                     FORMAT(date,'yyyy-MM') period, 
                                    SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
                                     SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expenses
                        FROM Transactions GROUP BY FORMAT(date,'yyyy-MM')
                        ORDER BY period DESC
 
-                       """, (limit,))
+                       """)
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -154,7 +154,8 @@ def month_summary(year,month):
             MAX(CASE WHEN type = 'expense' THEN amount END) AS max_expense,
             MIN(CASE WHEN type = 'expense' THEN amount END) AS min_expense,
             COUNT(CASE WHEN type = 'expense' THEN 1 END) AS expense_count,
-            
+            COUNT(*) AS total_transactions
+
         FROM Transactions
         WHERE YEAR(date) = ? AND MONTH(date) = ?
     """, (year, month))
@@ -163,3 +164,22 @@ def month_summary(year,month):
      cursor.close()
      conn.close()
      return row
+
+def get_top_expenses_from_db(limit=5):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(f"""
+        SELECT TOP {limit}
+               category, 
+               SUM(amount) AS total_amount
+        FROM Transactions
+        WHERE type = 'expense'
+        GROUP BY category
+        ORDER BY total_amount DESC
+    """)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return rows
+
+
