@@ -17,6 +17,7 @@ def get_transactions_by_category():
 
     df = pd.DataFrame(data)
     return df
+
 def get_balance_over_time(period = 'daily'):
     rows = balance_over_time(period)
     if not rows:
@@ -46,6 +47,7 @@ def get_income_vs_expense(limit = 6):
     df = pd.DataFrame(data)
     df['balance'] = df['income'] - df['expenses']
     return df
+
 def get_monthly_summary(year,month):
     row = month_summary(year,month)
     if not row:
