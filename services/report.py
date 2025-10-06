@@ -1,9 +1,18 @@
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageBreak
+import os
+import tempfile
+import smtplib
+from email.message import EmailMessage
+from datetime import datetime
+import matplotlib.pyplot as plt
+import pandas as pd
+
+from reportlab.platypus import (
+    SimpleDocTemplate, Paragraph, Spacer, Image, PageBreak, Table, TableStyle
+)
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.enums import TA_CENTER
-import tempfile
-import matplotlib.pyplot as plt
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from reportlab.lib import colors
 
 
 class Report:
@@ -30,31 +39,73 @@ class Report:
             spaceAfter=10
         )
     def add_title(self,text):
-        pass
+        self.elements.append(Paragraph(text, self.title_style))
+        self.elements.append(Spacer(1,20))
 
     def add_subtitle(self,text):
-        pass
+        self.elements.append(Paragraph(text,self.subtitle_style))
+        self.elements.append(Spacer(1,10))
     
     def add_paragraph(self,text):
-        pass
+        self.elements.append(Paragraph(text, self.styles["Normal"]))
+        self.elements.append(Spacer(1,12))
 
-    """dla funkcji month_summary z data_analyzer"""
     def add_table(self,df, caption = None):
-        pass
+        if df.empty:
+            self.add_paragraph("Brak danych do wyświetlenia.")
+            return
+        data = [df.columns.tolist()] + df.values.tolist()
+        table = Table(data, hAlign = "LEFT")
+        table.setStyle(TableStyle([
+            ("BACKGROUND", (0,0),(-1,0),colors.lightblue),
+            ("TEXTCOLOR", (0,0),(-1,0), colors.black),
+            ("ALIGN", (0,0), (-1,-1), "CENTER"),
+            ("GRID", (0,0),(-1,-1), 0.5, colors.lightseagreen),
+            ("FONTNAME", (0,0),(-1,0), "Helvetica-Bold"),
+            ("ROWBACKGROUNDS", (0,1), (-1,-1), [colors.white,colors.lightgrey])
+        ]))
+        self.elements.append(table)
+        if caption:
+            self.elements.append(Paragraph(caption,self.styles["Italic"]))
+        self.elements.append(Spacer(1,12))
+
+
 
     def add_figure(self, fig, caption = None, width = None, height = None):
-        pass
+        if fig is None:
+            self.add_paragraph("Brak wykresu do wyświetlenia.")
+            return
+        temp = tempfile.NamedTemporaryFile(delete=False,suffix=".png")
+        fig.savefig(temp.name,bbox_inches='tight')
+        plt.close(fig)
+        self.temp_files.append(temp.name)
+        self.elements.append(Image(temp.name, width, height))
+        if caption:
+            self.elements.append(Paragraph(caption, self.styles["Italic"]))
+        self.elements.append(Spacer(1,12))
 
     def add_page_break(self):
-        pass
+        self.elements.append(PageBreak())
 
-    def add_header_footer(self, header_text, footer_text):
-        pass
-
+    def add_timestamp(self):
+        now = datetime.now().strftime("%Y-%m-%d %H:%M")
+        self.elements.append(Paragraph(f"Raport wygenerowano: {now}", self.styles["Normal"]))
+        self.elements.append(Spacer(1,12))
     def save_temp_report(self, filename = None):
-        pass
+        if not filename:
+            temp = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
+            filename = temp.name
 
+        doc = SimpleDocTemplate(filename, pagesize = self.pagesize)
+        doc.build(self.elements)
+        for f in self.temp_files:
+            os.remove(f)
+        return filename
+        
     def export_to_email(self, address):
         pass
     def build(self):
-        pass
+        doc = SimpleDocTemplate(self.filename, pagesize = self.pagesize)
+        doc.build(self.elements)
+        for f in self.temp_files:
+            os.remove(f)
