@@ -178,7 +178,7 @@ def plot_top_n_expenses(data):
         ax.axis('off')
         return fig
     
-    fig, ax = fig.subplots(figsize=(12,8))
+    fig, ax = plt.subplots(figsize=(12,8))
     y = np.arange(len(data))
     height = 0.5
 
