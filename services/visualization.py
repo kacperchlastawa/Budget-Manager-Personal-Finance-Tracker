@@ -16,9 +16,9 @@ def plot_transactions_by_category(data):
     
     fig, ax = plt.subplots(figsize=(12,8))
 
-    if len(data) > 8:
-        top_data = data.head(8).copy()
-        other_sum = data.iloc[8:]['total'].sum()
+    if len(data) > 6:
+        top_data = data.head(6).copy()
+        other_sum = data.iloc[6:]['total'].sum()
         if other_sum > 0:
             other_row = pd.DataFrame([{'category': 'The rest', 'total':other_sum}])
             plot_data = pd.concat([top_data,other_row])
@@ -30,20 +30,22 @@ def plot_transactions_by_category(data):
     
     wedges, texts, autotexts = ax.pie(
         plot_data['total'],
-        labels = plot_data['category'],
+        labels = None,
         autopct='%1.1f%%',
         colors = COLORS[:len(plot_data)],
         startangle=90,
-        text={'fontsize':11,'weight':'bold'}, 
-        explode = [0.05] * len(plot_data)  
+        explode = [0.04] * len(plot_data)  
     )
 
     for autotext in autotexts:
-        autotext.set_color('white')
+        autotext.set_color('black')
         autotext.set_fontsize(10)
         autotext.set_weight('bold')
     
-
+        for text in texts:
+            text.set_fontsize(11)
+            text.set_weight('bold') 
+            
     ax.set_title('Expenses by category',fontsize = 16, weight = 'bold', pad = 20)
     legend_labels = [f"{row['category']}: {row['total']:.2f} zł" 
                      for _, row in plot_data.iterrows()]
@@ -142,11 +144,11 @@ def plot_incomes_vs_expenses(data):
 
     bars1 = ax.bar(x - width/2, data['income'], width, 
                    label='Incomes', color='#4ECDC4', 
-                   alpha=0.9, edgecolor='#3BACA0', linewidth=1.5)
+                   alpha=0.9, edgecolor='#000000', linewidth=1.5)
     
     bars2 = ax.bar(x + width/2, data['expenses'], width, 
                    label='Expenses', color='#FF6B6B', 
-                   alpha=0.9, edgecolor='#E85555', linewidth=1.5)
+                   alpha=0.9, edgecolor='#000000', linewidth=1.5)
     for bars in [bars1, bars2]:
         for bar in bars:
             height = bar.get_height()
@@ -154,7 +156,7 @@ def plot_incomes_vs_expenses(data):
                 ax.text(bar.get_x() + bar.get_width()/2., height,
                        f'{height:.0f}',
                        ha='center', va='bottom', 
-                       fontsize=9, weight='bold')
+                       fontsize=12, weight='bold')
     ax.axhline(y=0, color='black', linestyle='-', linewidth=0.8, alpha=0.3)
     
     ax.set_xlabel('Period', fontsize=12, weight='bold')
@@ -199,7 +201,7 @@ def plot_top_n_expenses(data):
     plt.tight_layout()
     return fig
 
-def plot_savings_progress_vertical(data):
+def plot_savings_progress(data):
     if data.empty:
         fig, ax = plt.subplots(figsize=(10,6))
         ax.text(0.5, 0.5, 'Brak danych do wyświetlenia', 
@@ -208,7 +210,6 @@ def plot_savings_progress_vertical(data):
         return fig
     
     data = data.sort_values(by='progress')
-    
     fig, ax = plt.subplots(figsize=(12,8))
     x = np.arange(len(data))  
     width = 0.6               

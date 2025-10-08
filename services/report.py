@@ -55,41 +55,45 @@ class Report:
             self.add_paragraph("Brak danych do wyświetlenia.")
             return
         data = [df.columns.tolist()] + df.values.tolist()
-        table = Table(data, hAlign = "LEFT")
+        col_count = len(df.columns)
+        col_width = 450 / col_count
+        table = Table(data, hAlign = "LEFT", colWidths=[col_width] * col_count)
         table.setStyle(TableStyle([
+            ("FONTSIZE", (0, 0), (-1, -1), 6),
             ("BACKGROUND", (0,0),(-1,0),colors.lightblue),
             ("TEXTCOLOR", (0,0),(-1,0), colors.black),
             ("ALIGN", (0,0), (-1,-1), "CENTER"),
             ("GRID", (0,0),(-1,-1), 0.5, colors.lightseagreen),
-            ("FONTNAME", (0,0),(-1,0), "Helvetica-Bold"),
-            ("ROWBACKGROUNDS", (0,1), (-1,-1), [colors.white,colors.lightgrey])
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ("TOPPADDING", (0, 0), (-1, -1), 4)
         ]))
         self.elements.append(table)
         if caption:
             self.elements.append(Paragraph(caption,self.styles["Italic"]))
-        self.elements.append(Spacer(1,12))
+        self.elements.append(Spacer(1,8))
 
 
 
     def add_figure(self, fig, caption = None, width = None, height = None):
         if fig is None:
-            self.add_paragraph("Brak wykresu do wyświetlenia.")
+            self.add_paragraph("No chart to display.")
             return
+        if caption:
+            self.elements.append(Paragraph(caption, self.styles["Italic"]))
         temp = tempfile.NamedTemporaryFile(delete=False,suffix=".png")
         fig.savefig(temp.name,bbox_inches='tight')
         plt.close(fig)
         self.temp_files.append(temp.name)
         self.elements.append(Image(temp.name, width, height))
-        if caption:
-            self.elements.append(Paragraph(caption, self.styles["Italic"]))
         self.elements.append(Spacer(1,12))
+
 
     def add_page_break(self):
         self.elements.append(PageBreak())
 
     def add_timestamp(self):
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
-        self.elements.append(Paragraph(f"Raport wygenerowano: {now}", self.styles["Normal"]))
+        self.elements.append(Paragraph(f"Raport generated: {now}", self.styles["Normal"]))
         self.elements.append(Spacer(1,12))
     def save_temp_report(self, filename = None):
         if not filename:
@@ -105,7 +109,16 @@ class Report:
     def export_to_email(self, address):
         pass
     def build(self):
-        doc = SimpleDocTemplate(self.filename, pagesize = self.pagesize)
-        doc.build(self.elements)
+        try:
+            doc = SimpleDocTemplate(self.filename, pagesize = self.pagesize)
+            doc.build(self.elements)
+        finally:
+            self._cleanup_temp_files()
+    def _cleanup_temp_files(self):
         for f in self.temp_files:
-            os.remove(f)
+            try:
+                if os.path.exists(f):
+                    os.remove(f)
+            except Exception as e:
+                print(f"Warning: Could not remove {f}: {e}")
+        self.temp_files.clear()

@@ -53,19 +53,17 @@ def get_monthly_summary(year,month):
     if not row:
         return None
     return {
-            'year': year,
-            'month': month,
             'total_income': float(row[0]) if row[0] else 0,
-            'avg_income': float(row[1]) if row[1] else 0,
+            'avg_income': round(float(row[1]),2) if row[1] else 0,
             'max_income': float(row[2]) if row[2] else 0,
             'min_income': float(row[3]) if row[3] else 0,
-            'income_count': int(row[4]) if row[4] else 0,
-            'total_expense': float(row[5]) if row[5] else 0,
-            'avg_expense': float(row[6]) if row[6] else 0,
-            'max_expense': float(row[7]) if row[7] else 0,
-            'min_expense': float(row[8]) if row[8] else 0,
-            'expense_count': int(row[9]) if row[9] else 0,
-            'total_transactions': int(row[10]) if row[10] else 0,
+            'inc_count': int(row[4]) if row[4] else 0,
+            'total_exp': round(float(row[5]),2) if row[5] else 0,
+            'avg_exp': round(float(row[6]),2) if row[6] else 0,
+            'max_exp': float(row[7]) if row[7] else 0,
+            'min_exp': float(row[8]) if row[8] else 0,
+            'exp_count': int(row[9]) if row[9] else 0,
+            'strans_count': int(row[10]) if row[10] else 0,
             'balance': (float(row[0]) if row[0] else 0) - (float(row[5]) if row[5] else 0)
         }
 
