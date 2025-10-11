@@ -2,6 +2,7 @@
 *.pyc
 *.pyo
 # *.db
-.env/
-.venv/
+env/
+venv/
 notatki.txt
+ui/__pycache__
