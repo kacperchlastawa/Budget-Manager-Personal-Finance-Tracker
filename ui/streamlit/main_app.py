@@ -27,7 +27,7 @@ st.sidebar.title("Panel informacji")
 
 #1
 today = datetime.today()
-st.sidebar.write(f"Data:{today.strftime('%Y-%m-%d')}")
+st.sidebar.write(f"Data:{today.strftime('%Y-%m-%d %H:%M')}")
 
 #2
 budget = Budget()
@@ -35,7 +35,7 @@ try:
     balance = budget.get_balance()
 except Exception:
     balance = 0.0
-st.sidebar.metric(label = "Current balance : ", value = f"{balance:.2f} zł")
+st.sidebar.metric(label = "**Current balance** : ", value = f"{balance:.2f} zł")
 
 
 #3 

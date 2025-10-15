@@ -38,7 +38,6 @@ def show_transactions(budget):
     for transaction in transactions:
         print(transaction)
     
-#todo: function tgat remembers its last state
 def show_balance(budget):
     balance = budget.get_balance()
     print(f"Current balance: {balance}")

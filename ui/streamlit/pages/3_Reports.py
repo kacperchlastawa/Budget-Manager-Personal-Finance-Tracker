@@ -37,6 +37,7 @@ except Exception:
 #========================
 #MAIN MENU
 #========================
-st.title("Report section")
+st.title("Report section📈")
 st.markdown("This section allows you to generate raport to summarize your last budget actions.")
+
 

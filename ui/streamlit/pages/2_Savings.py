@@ -38,7 +38,7 @@ except Exception:
 #========================
 #MAIN MENU
 #========================
-st.title("Savings section")
+st.title("Savings section💸")
 st.markdown("This section allows you to manage your saving goals and save your money.")
 
 
