@@ -10,7 +10,7 @@ income_vs_expense_chart = plot_incomes_vs_expenses(get_income_vs_expense(limit=5
 top_expenses_chart = plot_top_n_expenses(get_top_expenses(limit=5))
 chart_savings_progress = plot_savings_progress(get_savings_progress())
 summary = get_monthly_summary(2025, 10)
-summary_table = pd.DataFrame([summary])  # <- konwersja słownika na DataFrame
+summary_table = pd.DataFrame([summary])  
 summary2 = get_monthly_summary(2025,9)
 summary_table2 = pd.DataFrame([summary2])
 # -----------------------
