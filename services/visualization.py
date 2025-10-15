@@ -210,7 +210,7 @@ def plot_savings_progress(data):
         return fig
     
     data = data.sort_values(by='progress')
-    fig, ax = plt.subplots(figsize=(12,8))
+    fig, ax = plt.subplots(figsize=(10,6))
     x = np.arange(len(data))  
     width = 0.6               
     

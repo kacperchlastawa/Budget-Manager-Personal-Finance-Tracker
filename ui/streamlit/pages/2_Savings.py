@@ -2,9 +2,11 @@ import pandas as pd
 import streamlit as st
 from models.budget import Budget
 from models.savings import *
-from services.data_analyzer import get_monthly_summary
+from services.data_analyzer import get_monthly_summary, get_savings_progress
 from datetime import datetime
 from models.transaction import Income, Expense
+from services.visualization import plot_savings_progress
+from ui.streamlit.pages.helpers import style_savings_goals
 
 st.set_page_config(
     page_title= "Section - Savings",
@@ -109,8 +111,8 @@ if goals:
         st.info("No saving goals found. Please add a goal.")
     else:
         df = pd.DataFrame(saving_goals)
-        st.dataframe(df, use_container_width=True)
-
+        styled_df = style_savings_goals(df)
+        st.dataframe(styled_df, use_container_width=True)
 st.divider()
 #========================
 #MANAGE SAVINGS GOALS
@@ -163,4 +165,54 @@ with tab1:
                     else:
                         st.error("Failed to add money to the goal.")
 with tab2:
-    pass
+    saving_goals = savings.show_goals()
+    if not saving_goals:
+        st.info("No saving goals found. Please add a goal.")
+    form_goal_values = {
+        "goal_name": None,
+        "amount": None,
+        "description": None,
+        "date": None
+    }
+    st.subheader("Withdraw Money from a Saving Goal")
+    with st.form(key = "withdraw money form"):
+        form_goal_values["goal_name"] = st.selectbox("Select Goal", options = [goal["Goal Name"] for goal in saving_goals])
+        form_goal_values["amount"] = st.number_input("Amount to withdraw", min_value=0.01, step=0.01, format="%.2f")
+        form_goal_values["description"] = st.text_area("Description")
+        form_goal_values["date"] = st.date_input("Date", max_value=datetime.today())
+        submit_button = st.form_submit_button(label="Withdraw Money")
+        if submit_button:
+            if form_goal_values["amount"] <= 0:
+                st.warning("Please enter a valid amount greater than zero.")
+            else:
+                if form_goal_values["date"] is None:
+                    st.warning("Please select a date.")
+                else:
+                    success = savings.withdraw_from_goal(
+                        form_goal_values["goal_name"],
+                        form_goal_values["amount"],
+                        form_goal_values["description"],
+                        form_goal_values["date"].strftime("%Y-%m-%d")
+                    )
+                    if success:
+                        income = Income(
+                            form_goal_values["amount"],
+                            form_goal_values["date"].strftime("%Y-%m-%d"),
+                            f"Savings: {form_goal_values['goal_name']}",
+                            form_goal_values["description"]
+                        )
+                        budget.add_transaction(income)
+                        st.toast(f"Withdrew {form_goal_values['amount']:.2f} from goal '{form_goal_values['goal_name']}' successfully!", icon="✅")
+                        st.rerun()
+                    else:
+                        st.error("Failed to withdraw money from the goal.")
+
+#=======================
+#Show goal progress
+#=======================
+st.divider()
+st.header("Check Saving Goal Progress")
+check_progress = st.button("SHOW PROGRESS")
+if check_progress:
+    fig = plot_savings_progress(get_savings_progress())
+    st.pyplot(fig)
