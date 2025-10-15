@@ -1,9 +1,13 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import streamlit as st
 from models.budget import Budget
 from services.data_analyzer import get_monthly_summary
 from datetime import datetime
 from models.transaction import Income, Expense
 import pandas as pd
+from helpers import style_dataframe
 budget = Budget()
 
 st.set_page_config(
@@ -111,10 +115,11 @@ with tab1:
             num_to_display = st.session_state.num_transactions
             if st.session_state.from_beginning_or_end == "From beginning":
                 df = pd.DataFrame([t.__dict__ for t in transactions[:num_to_display]])
-                st.dataframe(df)
+                st.table(style_dataframe(df))
             else:
                 df = pd.DataFrame([t.__dict__ for t in transactions[-num_to_display:]])
-                st.dataframe(df)
+                st.table(style_dataframe(df))
+
 #========================
 #FILTER BY CATEGORY
 #========================
@@ -131,7 +136,8 @@ with tab2:
                 st.info(f"No transactions found in category '{category_input}'.")
             else:
                 df = pd.DataFrame([t.__dict__ for t in filtered])
-                st.dataframe(df)
+                st.table(style_dataframe(df))
+
 #========================
 #TRANSACTIONS BY TYPE
 #========================
@@ -146,7 +152,8 @@ with tab3:
             st.info(f"No transactions found of type '{transaction_type}'.")
         else:
             df = pd.DataFrame([t.__dict__ for t in filtered])
-            st.dataframe(df)
+            st.table(style_dataframe(df))
+
 #========================
 #TOTAL BY TYPE
 #========================
