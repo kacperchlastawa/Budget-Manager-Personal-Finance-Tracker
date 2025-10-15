@@ -107,9 +107,17 @@ class Savings:
         if not goals:
             print("No savings goals found.")
             return
+        goal_list = []
         for row in goals:
             _, name, amount, goal_amount = row
             goal = SavingGoal(name, amount, goal_amount)
-            print(goal)
+            progress = (goal.amount / goal.goal_amount * 100) if goal.goal_amount > 0 else 0
+            goal_list.append({
+                "Goal Name": name,
+                "Current Amount": float(amount),
+                "Target Amount": float(goal_amount),
+                "Progress (%)": round(progress, 2)
+            })
+        return goal_list
 
     
