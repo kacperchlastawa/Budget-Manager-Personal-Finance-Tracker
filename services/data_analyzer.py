@@ -63,7 +63,7 @@ def get_monthly_summary(year,month):
             'max_exp': float(row[7]) if row[7] else 0,
             'min_exp': float(row[8]) if row[8] else 0,
             'exp_count': int(row[9]) if row[9] else 0,
-            'strans_count': int(row[10]) if row[10] else 0,
+            'trans_count': int(row[10]) if row[10] else 0,
             'balance': (float(row[0]) if row[0] else 0) - (float(row[5]) if row[5] else 0)
         }
 

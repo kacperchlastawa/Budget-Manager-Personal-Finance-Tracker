@@ -107,7 +107,9 @@ class Report:
         return filename
         
     def export_to_email(self, address):
-        pass
+        msg = EmailMessage()
+        msg['Subject'] = 'Your Budget Report'
+        
     def build(self):
         try:
             doc = SimpleDocTemplate(self.filename, pagesize = self.pagesize)

@@ -8,13 +8,13 @@ COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB
 
 def plot_transactions_by_category(data):
     if data.empty:
-        fig, ax = plt.subplots(figsize=(10, 6))
+        fig, ax = plt.subplots(figsize=(8, 8))
         ax.text(0.5, 0.5, 'Brak danych do wyświetlenia', 
                 ha='center', va='center', fontsize=16, color='gray')
         ax.axis('off')
         return fig
     
-    fig, ax = plt.subplots(figsize=(12,8))
+    fig, ax = plt.subplots(figsize=(10,16))
 
     if len(data) > 6:
         top_data = data.head(6).copy()
@@ -63,7 +63,7 @@ def balance_over_time(data,period = 'daily'):
                 ha='center', va='center', fontsize=16, color='gray')
         ax.axis('off')
         return fig
-    fig, ax = plt.subplots(figsize=(14, 7))
+    fig, ax = plt.subplots(figsize=(12, 8))
     
     # Main balance line
     ax.plot(data['period'], data['balance'], 
@@ -137,7 +137,7 @@ def plot_incomes_vs_expenses(data):
         ax.axis('off')
         return fig
 
-    fig, ax = plt.subplots(figsize=(14,8))
+    fig, ax = plt.subplots(figsize=(10,8))
 
     x = np.arange(len(data))
     width = 0.35
@@ -180,7 +180,7 @@ def plot_top_n_expenses(data):
         ax.axis('off')
         return fig
     
-    fig, ax = plt.subplots(figsize=(12,8))
+    fig, ax = plt.subplots(figsize=(10,7))
     y = np.arange(len(data))
     height = 0.5
 
@@ -210,7 +210,7 @@ def plot_savings_progress(data):
         return fig
     
     data = data.sort_values(by='progress')
-    fig, ax = plt.subplots(figsize=(10,6))
+    fig, ax = plt.subplots(figsize=(8,8))
     x = np.arange(len(data))  
     width = 0.6               
     

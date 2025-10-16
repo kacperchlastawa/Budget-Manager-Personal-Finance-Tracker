@@ -14,7 +14,13 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
-savings = Savings()
+if "budget" not in st.session_state:
+    st.session_state.budget = Budget()
+if "savings" not in st.session_state:
+    st.session_state.savings = Savings()
+
+budget = st.session_state.budget
+savings = st.session_state.savings
 #===============
 #SIDEBAR
 #========
@@ -25,7 +31,6 @@ today = datetime.today()
 st.sidebar.write(f"Data:{today.strftime('%Y-%m-%d')}")
 
 #2
-budget = Budget()
 try:
     balance = budget.get_balance()
 except Exception:
@@ -212,7 +217,10 @@ with tab2:
 #=======================
 st.divider()
 st.header("Check Saving Goal Progress")
-check_progress = st.button("SHOW PROGRESS")
-if check_progress:
-    fig = plot_savings_progress(get_savings_progress())
-    st.pyplot(fig)
+st.metric("Total Goals", len(saving_goals))
+total_saved = sum(goal["Current Amount"] for goal in saving_goals)
+st.metric("Total Saved", f"{total_saved:.2f} zł")
+    
+fig = plot_savings_progress(get_savings_progress())
+st.pyplot(fig)
+

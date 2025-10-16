@@ -6,6 +6,7 @@ from datetime import datetime
 from services.visualization import *
 import pandas as pd
 from reportlab.lib.pagesizes import A4
+from calendar import month_name
 
 today = datetime.today()
 st.set_page_config(
@@ -14,6 +15,12 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+if "budget" not in st.session_state:
+    st.session_state.budget = Budget()
+
+
+budget = st.session_state.budget
+
 #===============
 #SIDEBAR
 #========
@@ -24,7 +31,6 @@ today = datetime.today()
 st.sidebar.write(f"Data:{today.strftime('%Y-%m-%d')}")
 
 #2
-budget = Budget()
 try:
     balance = budget.get_balance()
 except Exception:
@@ -60,7 +66,14 @@ with st.form(key = "report_form"):
     with col1:
         year = st.number_input("Year", min_value=2000, max_value=today.year, value=today.year, step=1)
     with col2:
-        month = st.number_input("Month", min_value=1, max_value=12, value=today.month, step=1)
+        month_names = list(month_name)[1:]
+        selected_month = st.selectbox(
+        "Month",
+        options=month_names,
+        index=today.month - 1,
+        format_func=lambda x: x
+    )
+        month = month_names.index(selected_month) + 1
     generate_button = st.form_submit_button("Generate Report")
 if generate_button:
     try:    
@@ -68,37 +81,31 @@ if generate_button:
         report.add_title(f"Budget report — {datetime(year, month, 1).strftime('%B %Y')}")
         report.add_timestamp()
         report.add_paragraph(f"This report shows financial summary of {datetime(year, month, 1).strftime('%B %Y')}, including expenses, incomes and users savings analysis.")
-        report.add_page_break()
         report.add_title("Data visualisation")
         report.add_paragraph(" Charts below shows the most important personal budget indicators.")
         piechart_category = plot_transactions_by_category(get_transactions_by_category())
 
         report.add_figure(piechart_category, "Most common expenses", 280, 280)
         report.add_paragraph("The pie chart above illustrates the distribution of expenses across various categories, providing insights into spending habits.")
-        report.add_page_break()
 
         balance_chart =balance_over_time(get_balance_over_time(period = 'daily'), period = 'daily')
         balance_chart_2 = balance_over_time(get_balance_over_time(period = 'monthly'), period = 'monthly')
         report.add_figure(balance_chart, "Change in balance - daily", 300, 300)
         report.add_paragraph("The line chart above depicts the daily changes in your account balance over time, highlighting trends and fluctuations.")
-        report.add_page_break()
         report.add_figure(balance_chart_2, "Change in balance - monthly", 300, 300)
         report.add_paragraph("The line chart above illustrates the monthly changes in your account balance, providing a broader perspective on financial trends.")
 
         income_vs_expense_chart = plot_incomes_vs_expenses(get_income_vs_expense(limit=5))
         report.add_figure(income_vs_expense_chart, "Incomes and expenses comparison", 300, 300)
         report.add_paragraph("The bar chart above compares your monthly incomes and expenses, allowing you to visualize your financial balance.")
-        report.add_page_break()
 
         top_expenses_chart = plot_top_n_expenses(get_top_expenses(limit=5))
         report.add_figure(top_expenses_chart, "Top 5 biggest expenses", 250, 250)
         report.add_paragraph("The horizontal bar chart above highlights your top 5 biggest expenses, helping you identify major spending areas.")
-        report.add_page_break()
 
         chart_savings_progress = plot_savings_progress(get_savings_progress())
         report.add_figure(chart_savings_progress, "Saving progress", 300, 300)
         report.add_paragraph("The area chart above illustrates your savings progress over time, showcasing how your savings have accumulated.")
-        report.add_page_break()
 
         summary = get_monthly_summary(year, month)
         summary_table = pd.DataFrame([summary])  

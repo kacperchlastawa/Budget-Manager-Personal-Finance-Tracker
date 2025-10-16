@@ -16,6 +16,12 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+if "budget" not in st.session_state:
+    st.session_state.budget = Budget()
+
+
+budget = st.session_state.budget
+
 #===============
 #SIDEBAR
 #========
