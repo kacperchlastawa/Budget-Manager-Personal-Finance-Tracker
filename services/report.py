@@ -11,9 +11,12 @@ from reportlab.platypus import (
 )
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from reportlab.lib.enums import TA_CENTER
 from reportlab.lib import colors
-
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+from email.mime.multipart import MIMEMultipart
+from email.utils import COMMASPACE, formatdate
 
 class Report:
 
@@ -107,8 +110,36 @@ class Report:
         return filename
         
     def export_to_email(self, address):
-        msg = EmailMessage()
-        msg['Subject'] = 'Your Budget Report'
+        temp_report = self.save_temp_report()
+        try:
+            msg = MIMEMultipart()
+            msg['From'] = "kchl2209@gmail.com"
+            msg['To'] = address
+            msg['Subject'] = "Your Budget Report"
+
+            msg.attach(MIMEText("Please find attached your budget report.", 'plain'))
+            with open(temp_report, "rb") as f:
+                part = MIMEApplication(f.read(), Name=os.path.basename(temp_report)) 
+                part['Content-Disposition'] = f'attachment; filename="{os.path.basename(temp_report)}"'
+                msg.attach(part)
+            smtp_server = "smtp.gmail.com"
+            smtp_port = 465
+            sender_email = "kchl2209@gmail.com"
+            sender_password = "crlh lzwm gjnm waso"
+            with smtplib.SMTP_SSL(smtp_server, smtp_port) as smtp:
+                smtp.login(sender_email, sender_password)
+                smtp.send_message(msg)
+
+
+            print("✅ Report sent successfully!")
+
+        except Exception as e:
+            print(f"❌ Failed to send email: {e}")
+
+        finally:
+            if os.path.exists(temp_report):
+                os.remove(temp_report)
+
         
     def build(self):
         try:
