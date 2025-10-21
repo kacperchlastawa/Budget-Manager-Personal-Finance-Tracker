@@ -2,8 +2,8 @@ from data.savings_db import *
 from data.budget_db import *
 import pandas as pd
 
-def get_transactions_by_category():
-    rows = total_transaction_by_category()
+def get_transactions_by_category(month ,year):
+    rows = total_transaction_by_category(month, year)
     if not rows:
         return pd.DataFrame(columns=['category','total','count'])
     
@@ -89,8 +89,8 @@ def get_savings_progress():
         })
     return pd.DataFrame(progress_list)
 
-def get_top_expenses(limit = 5):
-    expenses = get_top_expenses_from_db()
+def get_top_expenses(limit = 5, year=None, month=None):
+    expenses = get_top_expenses_from_db(limit, year=year, month=month)
     top_expenses = []
     if not expenses:
         return pd.DataFrame(columns=['category', 'total_expense'])

@@ -88,13 +88,15 @@ def total_by_transaction_type(t_type):
     conn.close()
     return result[0] if result else 0
 
-def total_transaction_by_category():
+def total_transaction_by_category(month, year):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
                     SELECT category, SUM(amount) totalAmount,Count(*) transactionCount FROM Transactions WHERE type = 'expense'
+                    AND MONTH(date) = ?
+                    AND YEAR(date) = ?
                    GROUP BY category ORDER BY TotalAmount DESC
-                   """)
+                   """, (month, year))
     
     rows = cursor.fetchall()
     cursor.close()
@@ -165,7 +167,7 @@ def month_summary(year,month):
      conn.close()
      return row
 
-def get_top_expenses_from_db(limit=5):
+def get_top_expenses_from_db(limit, year=None, month=None):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute(f"""
@@ -174,9 +176,11 @@ def get_top_expenses_from_db(limit=5):
                SUM(amount) AS total_amount
         FROM Transactions
         WHERE type = 'expense'
+        AND YEAR(date) = ?
+        AND MONTH(date) = ?
         GROUP BY category
         ORDER BY total_amount DESC
-    """)
+    """, (year, month))
     rows = cursor.fetchall()
     cursor.close()
     conn.close()

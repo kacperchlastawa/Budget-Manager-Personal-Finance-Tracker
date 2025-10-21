@@ -83,7 +83,7 @@ if generate_button:
         report.add_paragraph(f"This report shows financial summary of {datetime(year, month, 1).strftime('%B %Y')}, including expenses, incomes and users savings analysis.")
         report.add_title("Data visualisation")
         report.add_paragraph(" Charts below shows the most important personal budget indicators.")
-        piechart_category = plot_transactions_by_category(get_transactions_by_category())
+        piechart_category = plot_transactions_by_category(get_transactions_by_category(month,year))
 
         report.add_figure(piechart_category, "Most common expenses", 280, 280)
         report.add_paragraph("The pie chart above illustrates the distribution of expenses across various categories, providing insights into spending habits.")
@@ -99,7 +99,7 @@ if generate_button:
         report.add_figure(income_vs_expense_chart, "Incomes and expenses comparison", 300, 300)
         report.add_paragraph("The bar chart above compares your monthly incomes and expenses, allowing you to visualize your financial balance.")
 
-        top_expenses_chart = plot_top_n_expenses(get_top_expenses(limit=5))
+        top_expenses_chart = plot_top_n_expenses(get_top_expenses(limit=5, year=year, month=month))
         report.add_figure(top_expenses_chart, "Top 5 biggest expenses", 250, 250)
         report.add_paragraph("The horizontal bar chart above highlights your top 5 biggest expenses, helping you identify major spending areas.")
 
