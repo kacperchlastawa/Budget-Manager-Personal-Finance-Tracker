@@ -7,7 +7,8 @@ from services.data_analyzer import get_monthly_summary
 from datetime import datetime
 from models.transaction import Income, Expense
 import pandas as pd
-from helpers import style_dataframe
+from ui.streamlit.helpers import style_dataframe
+from data.budget_db import get_categories
 budget = Budget()
 
 st.set_page_config(
@@ -71,9 +72,16 @@ with st.form(key = 'add_income_expense_form'):
     form_values["type"] = st.selectbox("Select type of transaction", options = ["Income","Expense"])
     form_values["amount"] = st.number_input("Enter amount", min_value=0.01, step=0.01, format="%.2f")
     form_values["date"] = st.date_input("Select date", max_value=datetime.today())
-    form_values["category"] = st.text_input("Enter category").strip()
+    #Categories
+    existing_categories = get_categories()
+    selected_category = st.selectbox("Select category", options = existing_categories + ["Add new category"])
+    if selected_category == "Add new category":
+        new_category = st.text_input("Enter new category name").strip()
+        if new_category:
+            form_values["category"] = new_category.capitalize()
+    else:
+        form_values["category"] = selected_category
     form_values["description"] = st.text_area("Enter description")
-
     submitted = st.form_submit_button("Add Transaction", on_click=None)
     if submitted:
         if form_values["amount"] <= 0:
@@ -131,7 +139,8 @@ with tab1:
 #========================
 with tab2:
     st.header("Filter Transactions by Category")
-    category_input = st.text_input("Enter category to filter by:").strip().lower()
+    existing_categories = get_categories()
+    category_input = st.selectbox("Select category to filter", options = existing_categories)
     filter_button = st.button("Filter by Category")
     if filter_button:
         if not category_input:
@@ -149,6 +158,8 @@ with tab2:
 #========================
 with tab3:
     st.header("Filter Transactions by Type")
+    st.slider("Number of transactions to display", min_value=1, max_value=100, value=10, step=1, key="type_num_transactions")
+    st.selectbox("From beginning or the end", options = ["From beginning","From the end"], key ="from_beginning_end")
     type_input = st.selectbox("Select transaction type", options = ["Income","Expense"])
     type_button = st.button("Filter by Transaction Type")
     if type_button:
@@ -156,9 +167,14 @@ with tab3:
         filtered = budget.transactions_by_type(transaction_type)
         if not filtered:
             st.info(f"No transactions found of type '{transaction_type}'.")
-        else:
-            df = pd.DataFrame([t.__dict__ for t in filtered])
-            st.table(style_dataframe(df))
+        else:                       
+            num_to_display = st.session_state.type_num_transactions
+            if st.session_state.from_beginning_end == "From beginning":
+                df = pd.DataFrame([t.__dict__ for t in filtered[:num_to_display]])
+                st.table(style_dataframe(df))
+            else:
+                df = pd.DataFrame([t.__dict__ for t in filtered[-num_to_display:]])
+                st.table(style_dataframe(df))
 
 #========================
 #TOTAL BY TYPE

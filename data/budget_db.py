@@ -33,7 +33,7 @@ def insert_transaction(obj):
 def get_transactions():
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Transactions")
+    cursor.execute("SELECT * FROM Transactions ORDER BY date")
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -42,7 +42,7 @@ def get_transactions():
 def get_transaction_by_type(t_type):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Transactions WHERE type = ?", (t_type,))
+    cursor.execute("SELECT * FROM Transactions WHERE type = ? ORDER BY date", (t_type,))
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -70,7 +70,7 @@ def get_balance():
 def filter_transactions_by_category(category):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Transactions WHERE LOWER(category) = LOWER(?)", (category,))
+    cursor.execute("SELECT * FROM Transactions WHERE LOWER(category) = LOWER(?) ORDER BY date", (category,))
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -82,7 +82,7 @@ def total_by_transaction_type(t_type):
     cursor = conn.cursor()
     cursor.execute("""
                     SELECT SUM(amount) FROM Transactions WHERE type = ?
-                   """, (t_type))
+                    """, (t_type))
     result = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -182,4 +182,14 @@ def get_top_expenses_from_db(limit=5):
     conn.close()
     return rows
 
+def get_categories():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT DISTINCT category FROM Transactions
+    """)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return [row[0] for row in rows]
 

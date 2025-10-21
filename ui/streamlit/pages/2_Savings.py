@@ -6,7 +6,7 @@ from services.data_analyzer import get_monthly_summary, get_savings_progress
 from datetime import datetime
 from models.transaction import Income, Expense
 from services.visualization import plot_savings_progress
-from ui.streamlit.pages.helpers import style_savings_goals
+from ui.streamlit.helpers import style_savings_goals
 
 st.set_page_config(
     page_title= "Section - Savings",

@@ -58,16 +58,13 @@ except Exception:
 
 st.markdown("### Choose section you want to manage")
 
-col1, col2, col3, col4 = st.columns(4)
-
+col1, col2, col3 = st.columns(3)
 with col1:
     st.page_link("pages/1_Budget.py", label = "Budget", icon = "💰")
 with col2:
     st.page_link("pages/2_Savings.py", label = "Savings", icon  = "💸")
 with col3:
     st.page_link("pages/3_Reports.py", label = "Report", icon = "📈")
-with col4:
-    st.page_link("pages/4_About.py", label = "About", icon = "📘")
 
 
 #Footer
