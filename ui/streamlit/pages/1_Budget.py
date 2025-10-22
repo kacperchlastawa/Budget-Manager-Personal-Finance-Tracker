@@ -187,3 +187,6 @@ if total_button:
     transaction_type = st.session_state.total_type_input.lower()
     total = budget.total_by_type(transaction_type)
     st.markdown(f"#### Total {transaction_type}: {total:.2f} zł")
+
+if summary["total_exp"] > summary["total_income"]:
+    st.sidebar.warning("⚠️ Spending exceeds income this month!")
