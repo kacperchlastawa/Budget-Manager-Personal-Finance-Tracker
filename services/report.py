@@ -110,7 +110,9 @@ class Report:
         return filename
         
     def export_to_email(self, address):
-        temp_report = self.save_temp_report()
+        temp_report = os.path.join(os.getcwd(), "temp_report.pdf")      
+        with open(self.filename, "rb") as src, open(temp_report, "wb") as dst:
+            dst.write(src.read())
         try:
             msg = MIMEMultipart()
             msg['From'] = "kchl2209@gmail.com"
@@ -119,9 +121,10 @@ class Report:
 
             msg.attach(MIMEText("Please find attached your budget report.", 'plain'))
             with open(temp_report, "rb") as f:
-                part = MIMEApplication(f.read(), Name=os.path.basename(temp_report)) 
-                part['Content-Disposition'] = f'attachment; filename="{os.path.basename(temp_report)}"'
+                part = MIMEApplication(f.read(), _subtype="pdf") 
+                part.add_header("Content-Disposition", "attachment", filename=os.path.basename(temp_report))
                 msg.attach(part)
+
             smtp_server = "smtp.gmail.com"
             smtp_port = 465
             sender_email = "kchl2209@gmail.com"

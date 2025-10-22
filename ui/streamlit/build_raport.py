@@ -4,10 +4,14 @@ from services.visualization import *
 from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from calendar import month_name
+import os
+import pandas as pd
 
 def build_raport(filename, month, year):
-        report = Report(filename, pagesize=A4)
-        report.add_title(f"Budget report — {datetime(year, month, 1).strftime('%B %Y')}")
+        output_path = os.path.abspath(filename)
+
+        report = Report(output_path, pagesize=A4)
+        report.add_title(f"Budget Report — {month_name[month]} {year}")
         report.add_timestamp()
         report.add_paragraph(f"This report shows financial summary of {datetime(year, month, 1).strftime('%B %Y')}, including expenses, incomes and users savings analysis.")
         report.add_title("Data visualisation")
@@ -48,5 +52,7 @@ def build_raport(filename, month, year):
             report.add_table(summary_table2, f"Table. {datetime(year, month-1 if month > 1 else 12, 1).strftime('%B %Y')} - summary")
             report.add_paragraph("The table above provides a detailed summary of your financial statistics for the previous month, allowing for comparison with the current month.")
         report.build()
+        if not os.path.exists(output_path) or os.path.getsize(output_path) == 0:
+                raise FileNotFoundError(f"Report file was not created correctly at {output_path}")
 
         return report
