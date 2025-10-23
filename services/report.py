@@ -17,7 +17,7 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.utils import COMMASPACE, formatdate
-
+from config.email_config import EMAIL_SENDER, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT
 class Report:
 
     def __init__(self, filename  = 'budget_raport.pdf', pagesize=A4):
@@ -115,7 +115,7 @@ class Report:
             dst.write(src.read())
         try:
             msg = MIMEMultipart()
-            msg['From'] = "kchl2209@gmail.com"
+            msg['From'] = EMAIL_SENDER
             msg['To'] = address
             msg['Subject'] = "Your Budget Report"
 
@@ -125,10 +125,10 @@ class Report:
                 part.add_header("Content-Disposition", "attachment", filename=os.path.basename(temp_report))
                 msg.attach(part)
 
-            smtp_server = "smtp.gmail.com"
-            smtp_port = 465
-            sender_email = "kchl2209@gmail.com"
-            sender_password = "crlh lzwm gjnm waso"
+            smtp_server = SMTP_SERVER
+            smtp_port = SMTP_PORT
+            sender_email = EMAIL_SENDER
+            sender_password = EMAIL_PASSWORD
             with smtplib.SMTP_SSL(smtp_server, smtp_port) as smtp:
                 smtp.login(sender_email, sender_password)
                 smtp.send_message(msg)

@@ -7,7 +7,7 @@ from services.visualization import *
 import pandas as pd
 from reportlab.lib.pagesizes import A4
 from calendar import month_name
-from ui.streamlit.build_raport import build_raport
+from ui.streamlit.help_functions.build_raport import build_raport
 today = datetime.today()
 st.set_page_config(
     page_title= "Section - Reports",
