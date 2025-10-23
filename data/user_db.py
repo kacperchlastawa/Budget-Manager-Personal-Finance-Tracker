@@ -1,5 +1,8 @@
-from data.conection import get_connection
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+from .conection import get_connection
 from models.user import User
+
 def create_user_table():
     conn = get_connection()
     cursor = conn.cursor()

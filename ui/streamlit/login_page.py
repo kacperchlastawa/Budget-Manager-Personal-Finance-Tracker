@@ -1,7 +1,5 @@
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 import streamlit as st
-from data.user_db import login_user, register_user, delete_user, get_users
+from data.user_db import *
 from models.user import User
 
 st.set_page_config(
@@ -18,7 +16,7 @@ if not st.session_state.get("logged_in", False):
 #SIDEBAR
 #######
 # SIDEBAR — widoczny tylko dla zalogowanego użytkownika
-if st.session_state.get('logged_in', False):
+if st.session_state.get('logged_in', True):
     with st.sidebar:
         st.title("👤 User Panel")
         st.markdown(f"**Logged in as:** {st.session_state['username']}")
@@ -45,7 +43,7 @@ if st.button("Login"):
         st.experimental_rerun()
     else:
         st.error("Invalid username or password. Please try again.")
-if st.session_state.get('logged_in', False):
+if st.session_state.get('logged_in', True):
     st.success(f"Welcome back, {st.session_state['name']}!")
     st.markdown("---")
     st.markdown("### ✅ You are logged in.")
