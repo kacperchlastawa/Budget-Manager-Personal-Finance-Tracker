@@ -1,5 +1,5 @@
 import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))) # - bez tego nie widzi mi modułów
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))) # - bez tego nie widzi mi modułów
 
 import streamlit as st
 from models.budget import Budget

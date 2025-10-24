@@ -7,7 +7,7 @@ from services.data_analyzer import get_monthly_summary
 from datetime import datetime
 from models.transaction import Income, Expense
 import pandas as pd
-from ui.streamlit.help_functions.helpers import style_dataframe
+from help_functions.helpers import style_dataframe
 from data.budget_db import get_categories
 budget = Budget()
 

@@ -19,7 +19,7 @@ def create_user_table():
     cursor.close()
     conn.close()
 
-    def register_user(username, password, email, name):
+def register_user(username, password, email, name):
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("""
@@ -29,7 +29,8 @@ def create_user_table():
             cursor.close()
             conn.close()
             raise ValueError("Username or email already exists")
-        user = User(username, password, email, name)
+        
+        user = User.create_new(username, password, email, name)
         cursor.execute("""
             INSERT INTO Users (username, password_hash, email, name)
             VALUES (?, ?, ?, ?)
@@ -38,7 +39,7 @@ def create_user_table():
         cursor.close()
         conn.close()
     
-    def delete_user(username):
+def delete_user(username):
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("DELETE FROM Users WHERE username = ?", (username,))
@@ -46,21 +47,23 @@ def create_user_table():
         cursor.close()
         conn.close()
     
-    def login_user(username, password):
+def login_user(username, password):
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM Users WHERE username = ?", (username,))
         row = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        if not row:
-            return None
-        user = User([row[0], row[1], row[2], row[3], row[4]])
+
+        if  row:
+            user = User(username=row[1], password_hash=row[2], email=row[3], name=row[4])
         if user.verify_password(password):
+            cursor.close()
+            conn.close()
             return user
+        cursor.close()
+        conn.close()    
         return None 
     
-    def get_users():
+def get_users():
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT username,email, name FROM Users ")
