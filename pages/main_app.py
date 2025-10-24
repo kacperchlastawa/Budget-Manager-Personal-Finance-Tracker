@@ -8,6 +8,7 @@ from services.report import Report
 from models.transaction import *
 from services.data_analyzer import get_monthly_summary
 from datetime import datetime
+from data.user_db import login_user
 
 st.set_page_config(
     page_title= "Budget Manager",
@@ -15,43 +16,81 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+#########
+#Safety
+#########
+if not st.session_state.get("logged_in", False):
+    st.warning("You must be logged in to access this page.")
+    st.stop()                                                                                                                                                                                                                       
 
 st.title("💰Budget Manager")
 st.subheader("Manage your budget, savings and get your account raport")
 st.markdown("----")
 
-#===============
+#==============
+#Functions
+#==============
+
+@st.cache_data
+def load_balance():
+    try:
+        budget = Budget()
+        return budget.get_balance()
+    except Exception:
+        return 0.0
+def load_summary(year, month):
+    try:
+        summary = get_monthly_summary(year, month)
+        return summary
+    except Exception:
+        return None
+    
 #SIDEBAR
 #========
-st.sidebar.title("Panel informacji")
+with st.sidebar:
+    st.title(f"Hello, {st.session_state.get('name', 'User')}!")
+    st.markdown("----")
 
-#1
-today = datetime.today()
-st.sidebar.write(f"Data:{today.strftime('%Y-%m-%d %H:%M')}")
+    st.sidebar.title("Panel informacji")
 
-#2
-budget = Budget()
-try:
-    balance = budget.get_balance()
-except Exception:
-    balance = 0.0
-st.sidebar.metric(label = "**Current balance** : ", value = f"{balance:.2f} zł")
+    #1
+    today = datetime.today()
+    st.write(f"Data:{today.strftime('%Y-%m-%d %H:%M')}")
 
-
-#3 
-try:
-    summary = get_monthly_summary(today.year, today.month)
-    if summary:
-        st.sidebar.markdown("### Month Summary")
-        st.sidebar.write(f"**Incomes:** {summary['total_income']:.2f} zł")
-        st.sidebar.write(f"**Expenses:** {summary['total_exp']:.2f} zł")
-        st.sidebar.write(f"**Balance:** {summary['balance']:.2f} zł")
-    else:
-        st.sidebar.info("No data to summary")
-except Exception:
-    st.sidebar.warning("Failed to download the data")
+    #2
+    balance = load_balance()
+    st.metric(label = "**Current balance** : ", value = f"{balance:.2f} zł")
 
 
+    #3 
+    try:
+        summary = load_summary(today.year, today.month)
+        if summary:
+            st.markdown("### Month Summary")
+            st.write(f"**Incomes:** {summary['total_income']:.2f} zł")
+            st.write(f"**Expenses:** {summary['total_exp']:.2f} zł")
+            st.write(f"**Balance:** {summary['balance']:.2f} zł")
+        else:
+            st.info("No data to summary")
+    except Exception:
+        st.warning("Failed to download the data")
+
+
+    st.markdown("---")
+    if st.button("🚪 Wyloguj"):
+        st.session_state['logged_in'] = False
+        st.rerun()
+    
+    st.markdown("----")
+    if st.button("❌ Delete Account"):
+        try:
+            from data.user_db import delete_user
+            delete_user(st.session_state['username'])
+            st.success("Account deleted successfully.")
+            st.session_state['logged_in'] = False
+            st.rerun()
+        except Exception as e:
+            st.error(f"Failed to delete account: {str(e)}")
 #=============
 #MAIN MENU
 #=============

@@ -13,6 +13,16 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
+st.markdown(
+    """
+    <style>
+        [data-testid="stSidebar"] {
+            display: none;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 if st.session_state.get("logged_in", False):
     st.switch_page("pages/main_app.py")
 
