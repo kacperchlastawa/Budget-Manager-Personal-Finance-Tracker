@@ -54,7 +54,7 @@ def login_user(username, password):
         row = cursor.fetchone()
 
         if  row:
-            user = User(id=row[0], username=row[1], password_hash=row[2], email=row[3], name=row[4])
+            user = User(username=row[1], password_hash=row[2], email=row[3], name=row[4])
         if user.verify_password(password):
             cursor.close()
             conn.close()

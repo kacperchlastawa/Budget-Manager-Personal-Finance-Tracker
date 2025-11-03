@@ -2,8 +2,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User:
-    def __init__(self,id, username, email, password_hash, name):
-        self.id = id
+    def __init__(self, username, email, password_hash, name):
         self.username = username
         self.email = email
         self.password_hash = password_hash

@@ -9,6 +9,7 @@ from models.transaction import Income, Expense
 import pandas as pd
 from help_functions.helpers import style_dataframe
 from data.budget_db import get_categories
+
 budget = Budget()
 
 st.set_page_config(
@@ -19,8 +20,6 @@ st.set_page_config(
 )
 if "budget" not in st.session_state:
     st.session_state.budget = Budget()
-
-user_id = st.session_state.get('id', 'User')
 
 
 budget = st.session_state.budget
@@ -36,7 +35,7 @@ st.sidebar.write(f"Data:{today.strftime('%Y-%m-%d %H:%M')}")
 
 #2
 try:
-    balance = budget.get_balance(user_id)
+    balance = budget.get_balance()
 except Exception:
     balance = 0.0
 st.sidebar.metric(label = "**Current balance** : ", value = f"{balance:.2f} zł")
@@ -44,7 +43,7 @@ st.sidebar.metric(label = "**Current balance** : ", value = f"{balance:.2f} zł"
 
 #3 
 try:
-    summary = get_monthly_summary(today.year, today.month, user_id)
+    summary = get_monthly_summary(today.year, today.month)
     if summary:
         st.sidebar.markdown("### Month Summary")
         st.sidebar.write(f"**Incomes:** {summary['total_income']:.2f} zł")
@@ -75,7 +74,7 @@ with st.form(key = 'add_income_expense_form'):
     form_values["amount"] = st.number_input("Enter amount", min_value=0.01, step=0.01, format="%.2f")
     form_values["date"] = st.date_input("Select date", max_value=datetime.today())
     #Categories
-    existing_categories = get_categories(user_id)
+    existing_categories = get_categories()
     selected_category = st.selectbox("Select category", options = existing_categories + ["Add new category"])
     if selected_category == "Add new category":
         new_category = st.text_input("Enter new category name").strip()

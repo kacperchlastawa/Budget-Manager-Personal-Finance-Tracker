@@ -8,7 +8,6 @@ def create_tables():
         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Transactions' AND xtype='U')
         CREATE TABLE Transactions (
             id INT PRIMARY KEY IDENTITY(1,1),
-            user_id INT NOT NULL UNIQUE,
             type NVARCHAR(10) NOT NULL CHECK (type IN ('income', 'expense')),
             amount FLOAT NOT NULL,
             date DATE NOT NULL,
@@ -20,36 +19,36 @@ def create_tables():
     cursor.close()
     conn.close()
 
-def insert_transaction(obj, user_id):
+def insert_transaction(obj):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO Transactions (user_id,type,amount, date, category, description)
-        VALUES (?,?, ?, ?, ?) WHERE user_id = ?
-    """, (obj.type,obj.amount, obj.t_date, obj.category, obj.description, user_id))
+        VALUES (?,?, ?, ?, ?) 
+    """, (obj.type,obj.amount, obj.t_date, obj.category, obj.description))
     conn.commit()
     cursor.close()
     conn.close()
 
-def get_transactions(user_id):
+def get_transactions():
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Transactions WHERE user_id = ? ORDER BY date", (user_id,))
+    cursor.execute("SELECT * FROM Transactions ORDER BY date")
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
     return rows
 
-def get_transaction_by_type(t_type, user_id):
+def get_transaction_by_type(t_type):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Transactions WHERE type = ? AND user_id = ? ORDER BY date", (t_type,user_id))
+    cursor.execute("SELECT * FROM Transactions WHERE type = ? ORDER BY date", (t_type))
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
     return rows
 
-def get_balance(user_id):
+def get_balance():
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -59,73 +58,72 @@ def get_balance(user_id):
            SELECT 
                 ISNULL(SUM(CASE WHEN type='income' THEN amount ELSE 0 END), 0) as i,
                 ISNULL(SUM(CASE WHEN type='expense' THEN amount ELSE 0 END), 0) as e
-           FROM Transactions WHERE user_id = ?
-        ) t
-    """, (user_id,))
+           FROM Transactions 
+        )t
+    """)
     result = cursor.fetchone()
     cursor.close()
     conn.close()
     return result[0] if result else 0
 
 
-def filter_transactions_by_category(category, user_id):
+def filter_transactions_by_category(category):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Transactions WHERE LOWER(category) = LOWER(?) AND user_id = ? ORDER BY date", (category,user_id))
+    cursor.execute("SELECT * FROM Transactions WHERE LOWER(category) = LOWER(?)  ORDER BY date", (category))
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
     return rows
 
 
-def total_by_transaction_type(t_type, user_id):
+def total_by_transaction_type(t_type):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
-                    SELECT SUM(amount) FROM Transactions WHERE type = ? AND user_id = ?
-                    """, (t_type, user_id))
+                    SELECT SUM(amount) FROM Transactions WHERE type = ? 
+                    """, (t_type))
     result = cursor.fetchone()
     cursor.close()
     conn.close()
     return result[0] if result else 0
 
-def total_transaction_by_category(month, year, user_id):
+def total_transaction_by_category(month, year):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
                     SELECT category, SUM(amount) totalAmount,Count(*) transactionCount FROM Transactions WHERE type = 'expense'
                     AND MONTH(date) = ?
                     AND YEAR(date) = ?
-                    AND user_id = ?
                    GROUP BY category ORDER BY TotalAmount DESC
-                   """, (month, year, user_id))
+                   """, (month, year))
     
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
     return rows 
 
-def balance_over_time(period, user_id):
+def balance_over_time(period):
     conn = get_connection()
     cursor = conn.cursor()
     if period  == 'monthly':
         cursor.execute("""
                 SELECT FORMAT(date,'yyyy-MM') as period,SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END ) as net_amount 
-                       FROM Transactions WHERE user_id = ? GROUP BY FORMAT(date,'yyyy-MM')
+                       FROM Transactions GROUP BY FORMAT(date,'yyyy-MM')
                        ORDER BY period
-            """, (user_id,))
+            """)
     elif period == 'daily':
                 cursor.execute("""
                 SELECT date as period,SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END ) as net_amount 
-                       FROM Transactions WHERE user_id = ? GROUP BY date
+                       FROM Transactions GROUP BY date
                        ORDER BY period
-            """, (user_id,))
+            """)
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
     return rows
         
-def income_vs_expense(limit,  user_id=None):
+def income_vs_expense(limit):
     conn = get_connection()
     cursor = conn.cursor() 
     cursor.execute(f"""
@@ -134,7 +132,6 @@ def income_vs_expense(limit,  user_id=None):
                                    SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
                                     SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expenses
                        FROM Transactions 
-                       WHERE user_id = ?
                        GROUP BY FORMAT(date,'yyyy-MM')
                        ORDER BY period DESC
                        """)
@@ -143,7 +140,7 @@ def income_vs_expense(limit,  user_id=None):
     conn.close()
     return rows
 
-def month_summary(year,month, user_id):
+def month_summary(year,month):
      conn = get_connection()
      cursor = conn.cursor()
      cursor.execute("""
@@ -160,18 +157,16 @@ def month_summary(year,month, user_id):
             MIN(CASE WHEN type = 'expense' THEN amount END) AS min_expense,
             COUNT(CASE WHEN type = 'expense' THEN 1 END) AS expense_count,
             COUNT(*) AS total_transactions
-
         FROM Transactions
         WHERE YEAR(date) = ? AND MONTH(date) = ?
-        AND user_id = ?
-    """, (year, month, user_id))
+    """, (year, month))
     
      row = cursor.fetchone()
      cursor.close()
      conn.close()
      return row
 
-def get_top_expenses_from_db(limit, year=None, month=None, user_id=None):
+def get_top_expenses_from_db(limit, year=None, month=None):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute(f"""
@@ -182,22 +177,20 @@ def get_top_expenses_from_db(limit, year=None, month=None, user_id=None):
         WHERE type = 'expense'
         AND YEAR(date) = ?
         AND MONTH(date) = ?
-        AND user_id = ?
         GROUP BY category
         ORDER BY total_amount DESC
-    """, (year, month, user_id))
+    """, (year, month))
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
     return rows
 
-def get_categories(user_id):
+def get_categories():
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
         SELECT DISTINCT category FROM Transactions
-        WHERE user_id = ?
-    """, (user_id,))
+    """)
     rows = cursor.fetchall()
     cursor.close()
     conn.close()

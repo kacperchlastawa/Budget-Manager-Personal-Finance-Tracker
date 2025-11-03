@@ -44,7 +44,6 @@ with tab1:
                 st.session_state['logged_in'] = True
                 st.session_state['username'] = user.username
                 st.session_state['name'] = user.name
-                st.session_state['id'] = user.id
                 st.success(f"Welcome back, {st.session_state['name']}!")
                 st.markdown("### ✅ You are logged in.")
                 st.switch_page("pages/main_app.py")

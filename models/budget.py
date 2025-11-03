@@ -12,8 +12,8 @@ class Budget:
                 return False
         insert_transaction(transaction)
 
-    def get_balance(self, user_id):
-        balance = get_balance(user_id)
+    def get_balance(self):
+        balance = get_balance()
         return balance
     
     def get_transactions(self):

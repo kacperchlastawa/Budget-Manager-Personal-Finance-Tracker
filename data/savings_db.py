@@ -8,7 +8,6 @@ def create_tables():
         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='SavingGoals' AND xtype='U')
         CREATE TABLE SavingGoals (
             id INT PRIMARY KEY IDENTITY(1,1),
-            user_id INT NOT NULL UNIQUE,
             name NVARCHAR(50) NOT NULL,
             amount FLOAT NOT NULL DEFAULT 0,
             goal_amount FLOAT NOT NULL
@@ -19,7 +18,6 @@ def create_tables():
                    IF NOT EXISTS ( SELECT * FROM sysobjects WHERE name='SavingTransactions' AND xtype='U')
                    CREATE TABLE SavingTransactions(
                           id INT PRIMARY KEY IDENTITY(1,1),
-                          user_id INT NOT NULL UNIQUE,
                           goal_id INT NOT NULL,
                           amount FLOAT NOT NULL,
                           date DATE NOT NULL,
@@ -31,72 +29,70 @@ def create_tables():
     cursor.close()
     conn.close()
 
-def insert_goal(goal, user_id):
+def insert_goal(goal):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
             INSERT INTO SavingGoals (name, amount, goal_amount)
-            VALUES (?, ?, ?) WHERE user_id = ?
-        """, (goal.name, goal.amount, goal.goal_amount, user_id))
+            VALUES (?, ?, ?) 
+        """, (goal.name, goal.amount, goal.goal_amount))
     conn.commit()
     cursor.close()
     conn.close()
 
-def delete_goal(goal_name, user_id):
+def delete_goal(goal_name):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM SavingGoals WHERE name = ? AND user_id = ?", (goal_name,user_id))
+    cursor.execute("DELETE FROM SavingGoals WHERE name = ?", (goal_name,))
     conn.commit()
     cursor.close()
     conn.close()
 
-def get_goals(user_id):
+def get_goals():
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM SavingGoals WHERE user_id = ?", (user_id,))
+    cursor.execute("SELECT * FROM SavingGoals ")
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
     return rows
-def get_goal_by_name(goal_name, user_id):
+def get_goal_by_name(goal_name):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM SavingGoals WHERE name = ? AND user_id = ?", (goal_name,user_id))
+    cursor.execute("SELECT * FROM SavingGoals WHERE name = ?", (goal_name,))
     row = cursor.fetchone()
     cursor.close()
     conn.close()
     return row
 
-def update_goal_amount(goal_name, new_amount, user_id):
+def update_goal_amount(goal_name, new_amount,):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
         UPDATE SavingGoals
         SET amount = ?
         WHERE name = ?
-        AND user_id = ?
-    """, (new_amount, goal_name,user_id))
+    """, (new_amount, goal_name))
     conn.commit()
     cursor.close()
     conn.close()
 
-def insert_savings_transaction(goal_id,amount, t_date, description, user_id):
+def insert_savings_transaction(goal_id,amount, t_date, description):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
                 INSERT INTO SavingTransactions(goal_id,amount,date,description)
-                   VALUES(?,?,?,?) WHERE user_id = ?
-                   """,(goal_id,amount,t_date,description, user_id))
+                   VALUES(?,?,?,?)
+                   """,(goal_id,amount,t_date,description))
     conn.commit()
     cursor.close()
     conn.close()
 
-def delete_transactions(goal_id, user_id):
+def delete_transactions(goal_id):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
-                    DELETE FROM SavingTransactions WHERE goal_id = ? AND user_id = ?
-                   """, (goal_id,user_id))
+                    DELETE FROM SavingTransactions WHERE goal_id = ?""", (goal_id,))
     conn.commit()
     cursor.close()
     conn.close()
