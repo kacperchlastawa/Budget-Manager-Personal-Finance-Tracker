@@ -8,7 +8,7 @@ from services.report import Report
 from models.transaction import *
 from services.data_analyzer import get_monthly_summary
 from datetime import datetime
-from data.user_db import login_user
+from data.user_db import login_user , get_user_id, get_users
 
 st.set_page_config(
     page_title= "Budget Manager",
@@ -16,6 +16,8 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+user_id = st.session_state.get('id', 'User')
+
 #########
 #Safety
 #########
@@ -35,12 +37,12 @@ st.markdown("----")
 def load_balance():
     try:
         budget = Budget()
-        return budget.get_balance()
+        return budget.get_balance(user_id)
     except Exception:
         return 0.0
 def load_summary(year, month):
     try:
-        summary = get_monthly_summary(year, month)
+        summary = get_monthly_summary(year, month, user_id)
         return summary
     except Exception:
         return None
@@ -49,6 +51,8 @@ def load_summary(year, month):
 #========
 with st.sidebar:
     st.title(f"Hello, {st.session_state.get('name', 'User')}!")
+    st.markdown(f"ID : {user_id}")
+
     st.markdown("----")
 
     st.sidebar.title("Panel informacji")

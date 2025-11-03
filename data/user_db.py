@@ -54,7 +54,7 @@ def login_user(username, password):
         row = cursor.fetchone()
 
         if  row:
-            user = User(username=row[1], password_hash=row[2], email=row[3], name=row[4])
+            user = User(id=row[0], username=row[1], password_hash=row[2], email=row[3], name=row[4])
         if user.verify_password(password):
             cursor.close()
             conn.close()
@@ -71,3 +71,12 @@ def get_users():
         cursor.close()
         conn.close()
         return result
+
+def get_user_id(username):
+      conn = get_connection
+      cursor = conn.cursor()
+      cursor.execute(" SELECT id FROM Users WHERE username = ?", (username,))
+      result = cursor.fetchall()
+      cursor.close()
+      conn.close()
+      return result

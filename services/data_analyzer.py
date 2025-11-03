@@ -2,8 +2,8 @@ from data.savings_db import *
 from data.budget_db import *
 import pandas as pd
 
-def get_transactions_by_category(month ,year):
-    rows = total_transaction_by_category(month, year)
+def get_transactions_by_category(month ,year, user_id):
+    rows = total_transaction_by_category(month, year, user_id)
     if not rows:
         return pd.DataFrame(columns=['category','total','count'])
     
@@ -18,8 +18,8 @@ def get_transactions_by_category(month ,year):
     df = pd.DataFrame(data)
     return df
 
-def get_balance_over_time(period = 'daily'):
-    rows = balance_over_time(period)
+def get_balance_over_time(period = 'daily', user_id=None):
+    rows = balance_over_time(period, user_id)
     if not rows:
         return pd.DataFrame(columns=['period', 'balance'])
 
@@ -33,8 +33,8 @@ def get_balance_over_time(period = 'daily'):
     df['balance'] = df['net_amount'].cumsum()
     return df
     
-def get_income_vs_expense(limit = 6):
-    rows = income_vs_expense(limit)
+def get_income_vs_expense(limit = 6, user_id=None):
+    rows = income_vs_expense(limit, user_id)
     if not rows:
         return pd.DataFrame(columns = ['period','income','expenses'])
     data = []
@@ -48,8 +48,8 @@ def get_income_vs_expense(limit = 6):
     df['balance'] = df['income'] - df['expenses']
     return df
 
-def get_monthly_summary(year,month):
-    row = month_summary(year,month)
+def get_monthly_summary(year,month, user_id):
+    row = month_summary(year,month, user_id)
     if not row:
         return None
     return {
@@ -63,12 +63,12 @@ def get_monthly_summary(year,month):
             'max_exp': float(row[7]) if row[7] else 0,
             'min_exp': float(row[8]) if row[8] else 0,
             'exp_count': int(row[9]) if row[9] else 0,
-            'trans_count': int(row[10]) if row[10] else 0,
-            'balance': (float(row[0]) if row[0] else 0) - (float(row[5]) if row[5] else 0)
+            'trans_count': (int(row[10]) if row[10] else 0),
+            'balance': round((float(row[0]) if row[0] else 0) - (float(row[5]) if row[5] else 0),2)
         }
 
-def get_savings_progress():
-    rows = get_goals()
+def get_savings_progress(user_id=None):
+    rows = get_goals(user_id)
     progress_list = []
     if not rows:
         return pd.DataFrame(columns=['goal_name', 'amount', 'goal_amount', 'progress'])
@@ -89,8 +89,8 @@ def get_savings_progress():
         })
     return pd.DataFrame(progress_list)
 
-def get_top_expenses(limit = 5, year=None, month=None):
-    expenses = get_top_expenses_from_db(limit, year=year, month=month)
+def get_top_expenses(limit = 5, year=None, month=None,  user_id=None):
+    expenses = get_top_expenses_from_db(limit, year=year, month=month, user_id=user_id)
     top_expenses = []
     if not expenses:
         return pd.DataFrame(columns=['category', 'total_expense'])
