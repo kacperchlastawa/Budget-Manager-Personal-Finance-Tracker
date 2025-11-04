@@ -6,8 +6,40 @@ Budget Manager is a complete personal finance management system built with **Pyt
 
 ## ✨ Application Preview (Demo)
 
-*(Insert a GIF or screenshot here demonstrating your application)*
+**login page**
 
+<img width="1164" height="756" alt="image" src="https://github.com/user-attachments/assets/0cc66258-96e5-4090-a46f-351a54ee4e28" />
+
+
+**main page**
+<img width="1569" height="909" alt="image" src="https://github.com/user-attachments/assets/078cee54-c554-4975-a0a9-6193357795b4" />
+
+**Budget section**
+
+   * Adding income/expense - here we can add both income and expense
+     
+     <img width="1550" height="640" alt="image" src="https://github.com/user-attachments/assets/152ed83e-b0f0-4402-93b1-9b1fbb5fca0b" />
+     
+   * Displaying transactions - here we can choose number of transactons we want to see and option From beginning/ From the end
+
+        <img width="1536" height="555" alt="image" src="https://github.com/user-attachments/assets/d5267fac-b791-4c5f-a2f5-888883066e73" />
+
+     
+   * Here we can filter transactions by category
+     
+        <img width="1566" height="743" alt="image" src="https://github.com/user-attachments/assets/44480922-2422-4313-ac63-23735df7909c" />
+   
+   * Filtering transactions by type (income/expense)
+
+       <img width="1544" height="253" alt="image" src="https://github.com/user-attachments/assets/c168914d-608a-4f85-8775-77612821e07c" />
+
+   * Here we can calculate sum of all incomes or expenses
+
+        ![Uploading image.png…]()
+     
+
+**Savings section**
+   *
 
 
 ---
