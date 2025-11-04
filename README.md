@@ -34,4 +34,26 @@ git clone https://github.com/kacperchlastawa/budget-manager.git
 cd budget-manager
 ```
 **2. Create and Activate a Virtual Environment**
+```bash
+# Windows
+python -m venv venv
+.\venv\Scripts\activate
+
+# macOS / Linux
+python3 -m venv venv
+source venv/bin/activate
+```
+3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+4. Configure Your Environment
+You must configure your database connection and SMTP settings. See the "🔧 Configuration" section below.
+
+5. Run the Application
+The application is launched using Streamlit.
+```bash
+streamlit run ui/main_app.py
+```
 
