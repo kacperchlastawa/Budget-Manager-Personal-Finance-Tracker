@@ -109,3 +109,31 @@ For the email alerts feature to work, you must configure the `config/email_confi
 * **Visualization:** Matplotlib / Pandas
 * **Email Integration:** SMTP (Gmail App Password)
 
+
+---
+
+## ⚙️ How It Works
+
+1.  **Login or Register** — Users create personal accounts; all data is separated per user.
+2.  **Add Transactions** — Log daily expenses and incomes by category.
+3.  **Track Progress** — Visualize spending and savings trends interactively.
+4.  **Generate Reports** — Produce professional monthly PDF summaries.
+5.  **Automation** — A background scheduler checks every morning for overspending.
+6.  **Email Alerts** — Sends warnings and summary reports automatically.
+
+### 🛡️ Security
+
+* Passwords are securely **hashed** using `Werkzeug`.
+* App passwords or tokens are stored outside the repository in `config/email_config.py` (which is excluded from Git via `.gitignore`).
+
+---
+
+## 🧑‍💻 Autohr
+
+**Kacper Chlastawa**
+* Applied Computer Science student
+
+### 📬 Contact
+
+* **📧 Email:** [kacper.chlastawa03@gmail.com]
+* **🌐 GitHub:** [github.com/kacperchlastawa]
