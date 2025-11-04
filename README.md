@@ -35,13 +35,35 @@ Budget Manager is a complete personal finance management system built with **Pyt
 
    * Here we can calculate sum of all incomes or expenses
 
-        ![Uploading image.png…]()
+        <img width="1823" height="610" alt="image" src="https://github.com/user-attachments/assets/34207291-5fc8-4607-823c-4e551238a386" />
      
 
 **Savings section**
-   *
+
+   * At the beginning we can add goal and set the goal amount or remove the goal.
+
+       <img width="1520" height="328" alt="image" src="https://github.com/user-attachments/assets/a517acde-e4ad-477a-adda-233ade02ce17" />
+       
+  * We can display all our saving goals:
+
+     <img width="1522" height="669" alt="image" src="https://github.com/user-attachments/assets/4195e1af-7d9a-460f-85e4-15f17465ca69" />
+
+    * We can add money from budget to our goal:
+
+      <img width="1522" height="669" alt="image" src="https://github.com/user-attachments/assets/e774dcb4-2a31-4a8e-bada-ac67fd70796c" />
+      
+     * Or we can withdraw the money from it:
+
+         <img width="1522" height="669" alt="image" src="https://github.com/user-attachments/assets/6e737189-acde-43be-98a0-f28dfc573228" />
 
 
+  **Report section**
+  
+  In this section you can generate pdf with monthly summary, showing different charts and budget analysis. You can also export it to an email.
+
+      <img width="1796" height="845" alt="image" src="https://github.com/user-attachments/assets/277216b1-cae9-403d-a918-3bbb4ecbf6ee" />
+
+  
 ---
 
 ## 🚀 Getting Started (Installation & Launch)
