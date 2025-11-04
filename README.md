@@ -177,7 +177,7 @@ For the email alerts feature to work, you must configure the `config/email_confi
 
 ---
 
-## 🧑‍💻 Autohr
+## 🧑‍💻 Author
 
 **Kacper Chlastawa**
 * Applied Computer Science student
