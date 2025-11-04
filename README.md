@@ -6,66 +6,61 @@ Budget Manager is a complete personal finance management system built with **Pyt
 
 ## ✨ Application Preview (Demo)
 
-**login page**
+To see a preview of the features, click the sections below to expand them.
 
-<img width="1164" height="756" alt="image" src="https://github.com/user-attachments/assets/0cc66258-96e5-4090-a46f-351a54ee4e28" />
-
-
-**main page**
-<img width="1569" height="909" alt="image" src="https://github.com/user-attachments/assets/078cee54-c554-4975-a0a9-6193357795b4" />
-
-**Budget section**
-
-   * Adding income/expense - here we can add both income and expense
-     
-     <img width="1550" height="640" alt="image" src="https://github.com/user-attachments/assets/152ed83e-b0f0-4402-93b1-9b1fbb5fca0b" />
-     
-   * Displaying transactions - here we can choose number of transactons we want to see and option From beginning/ From the end
-
-        <img width="1536" height="555" alt="image" src="https://github.com/user-attachments/assets/d5267fac-b791-4c5f-a2f5-888883066e73" />
-
-     
-   * Here we can filter transactions by category
-     
-        <img width="1566" height="743" alt="image" src="https://github.com/user-attachments/assets/44480922-2422-4313-ac63-23735df7909c" />
-   
-   * Filtering transactions by type (income/expense)
-
-       <img width="1544" height="253" alt="image" src="https://github.com/user-attachments/assets/c168914d-608a-4f85-8775-77612821e07c" />
-
-   * Here we can calculate sum of all incomes or expenses
-
-        <img width="1823" height="610" alt="image" src="https://github.com/user-attachments/assets/34207291-5fc8-4607-823c-4e551238a386" />
-     
-
-**Savings section**
-
-   * At the beginning we can add goal and set the goal amount or remove the goal.
-
-       <img width="1520" height="328" alt="image" src="https://github.com/user-attachments/assets/a517acde-e4ad-477a-adda-233ade02ce17" />
-       
-  * We can display all our saving goals:
-
-     <img width="1522" height="669" alt="image" src="https://github.com/user-attachments/assets/4195e1af-7d9a-460f-85e4-15f17465ca69" />
-
-    * We can add money from budget to our goal:
-
-      <img width="1522" height="669" alt="image" src="https://github.com/user-attachments/assets/e774dcb4-2a31-4a8e-bada-ac67fd70796c" />
-      
-     * Or we can withdraw the money from it:
-
-         <img width="1522" height="669" alt="image" src="https://github.com/user-attachments/assets/6e737189-acde-43be-98a0-f28dfc573228" />
-
-
-  **Report section**
+<details>
+  <summary><b>Login & Main Page</b></summary>
   
-  In this section you can generate pdf with monthly summary, showing different charts and budget analysis. You can also export it to an email.
-
-      <img width="1796" height="845" alt="image" src="https://github.com/user-attachments/assets/277216b1-cae9-403d-a918-3bbb4ecbf6ee" />
-
+  <p>User login and registration page.</p>
+  <img width"700" alt="Login Page" src="https://github.com/user-attachments/assets/0cc66258-96e5-4090-a46f-351a54ee4e28" />
   
+  <p>The main dashboard after logging in.</p>
+  <img width="700" alt="Main Page" src="https://github.com/user-attachments/assets/078cee54-c554-4975-a0a9-6193357795b4" />
+</details>
+
+<details>
+  <summary><b>Budget Section (Transaction Management)</b></summary>
+  
+  <p><b>Adding Income/Expense:</b> Form to add new transactions.</p>
+  <img width="700" alt="Adding Transaction" src="https://github.com/user-attachments/assets/152ed83e-b0f0-4402-93b1-9b1fbb5fca0b" />
+  
+  <p><b>Displaying Transactions:</b> Option to choose the number of transactions to see (from the beginning or end).</p>
+  <img width="700" alt="Displaying Transactions" src="https://github.com/user-attachments/assets/d5267fac-b791-4c5f-a2f5-888883066e73" />
+
+  <p><b>Filtering Transactions by Category:</b></p>
+  <img width="700" alt="Filter by Category" src="https://github.com/user-attachments/assets/44480922-2422-4313-ac63-23735df7909c" />
+  
+  <p><b>Filtering Transactions by Type (Income/Expense):</b></p>
+  <img width="700" alt="Filter by Type" src="https://github.com/user-attachments/assets/c168914d-608a-4f85-8775-77612821e07c" />
+
+  <p><b>Calculating Sums:</b> Summary of total incomes or expenses.</p>
+  <img width="700" alt="Calculate Sums" src="https://github.com/user-attachments/assets/34207291-5fc8-4607-823c-4e551238a386" />
+</details>
+
+<details>
+  <summary><b>Savings Section (Goal Management)</b></summary>
+  
+  <p><b>Add/Remove Goals:</b> Set a savings goal and its target amount.</p>
+  <img width="700" alt="Add/Remove Savings Goal" src="https://github.com/user-attachments/assets/a517acde-e4ad-477a-adda-233ade02ce17" />
+  
+  <p><b>Displaying All Savings Goals:</b></p>
+  <img width="700" alt="Display All Goals" src="https://github.com/user-attachments/assets/4195e1af-7d9a-460f-85e4-15f17465ca69" />
+
+  <p><b>Adding Money to Goal:</b> Transfer funds from the main budget to a savings goal.</p>
+  <img width="700" alt="Add to Goal" src="https://github.com/user-attachments/assets/e774dcb4-2a31-4a8e-bada-ac67fd70796c" />
+  
+  <p><b>Withdrawing Money from Goal:</b></p>
+  <img width="700" alt="Withdraw from Goal" src="https://github.com/user-attachments/assets/6e737189-acde-43be-98a0-f28dfc573228" />
+D</details>
+
+<details>
+  <summary><b>Report Section (PDF & Email)</b></summary>
+  
+  <p>In this section, you can generate a PDF with a monthly summary, showing different charts and budget analysis. You can also export it to an email.</p>
+  <img width="700" alt="Report Generation" src="https://github.com/user-attachments/assets/7535f603-e2f4-4208-b8d1-110d04891d0b" />
+</details>
+
 ---
-
 ## 🚀 Getting Started (Installation & Launch)
 
 To run this application locally, follow the steps below.
