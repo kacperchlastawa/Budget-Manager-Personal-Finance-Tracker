@@ -86,5 +86,26 @@ For the email alerts feature to work, you must configure the `config/email_confi
 
 > ❗️ **Important:** Ensure that `config/email_config.py` (and any `.env` file) is added to your `.gitignore` file to avoid accidentally committing your credentials!
 
+## 🚀 Features
+
+* **✅ User Authentication** — Secure registration & login.
+* **✅ Expense & Income Tracking** — Add, edit, filter and search through transactions with category support.
+* **✅ Savings Goals** — Set and monitor progress toward financial goals.
+* **✅ Interactive Visualizations** — Charts for spending distribution, income vs. expenses, and savings trends.
+* **✅ Reports** — Generate monthly PDF summaries with visual data and analytics.
+* **✅ Email Alerts** — Automatic notifications when spending exceeds income.
+* **✅ Daily Automation** — Background scheduler to run daily budget checks.
+* **✅ Streamlit Interface** — Modern, responsive UI with a clean sidebar and easy navigation.
+
 ---
+
+## 🧠 Tech Stack
+
+* **Frontend:** Streamlit
+* **Backend:** Python 3.12
+* **Database:** SQL Server (via `pyodbc`)
+* **Reports:** ReportLab (PDF generation)
+* **Automation:** `schedule` (daily background jobs)
+* **Visualization:** Matplotlib / Pandas
+* **Email Integration:** SMTP (Gmail App Password)
 
