@@ -167,7 +167,12 @@ with tab1:
                             form_goal_values["description"]
                         )
                         budget.add_transaction(expense)
-                        
+                        goal = savings.get_goal(form_goal_values["goal_name"])
+                        if goal:
+                            progress = goal.amount / goal.goal_amount
+                            if progress >= 0.9:
+                                user_email = "ksw01185@gmail.com"
+                                send_savings_goal_progress(user_email, goal.name, progress)
                         st.toast(f"Added {form_goal_values['amount']:.2f} to goal '{form_goal_values['goal_name']}' successfully!", icon="✅")
                         st.rerun()
                     else:
