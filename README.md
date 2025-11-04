@@ -1,21 +1,37 @@
-💰 Budget Manager — Personal Finance App
-Budget Manager is a complete personal finance management system built with Python and Streamlit, designed to help users track their expenses, manage savings, 
-and generate insightful monthly reports — all in one place.
+# 💰 Budget Manager — Personal Finance App
 
-✨ Application Preview (Demo)
+Budget Manager is a complete personal finance management system built with **Python** and **Streamlit**. It is designed to help users track expenses, manage savings, and generate insightful monthly reports—all in one place.
+
+---
+
+## ✨ Application Preview (Demo)
+
+*(Insert a GIF or screenshot here demonstrating your application)*
 
 
 
+---
 
+## 🚀 Getting Started (Installation & Launch)
 
-🚀 Getting Started (Installation & Launch)
 To run this application locally, follow the steps below.
 
-Prerequisites
-Python 3.10+
-Access to a SQL Server instance
-Git
+### Prerequisites
 
-1. Clone the Repository
-git clone https://github.com/your-username/budget-manager.git
+Ensure you have the following installed:
+
+* Python 3.10+
+* Git
+* Access to a SQL Server instance
+
+### Installation
+
+**1. Clone the Repository**
+
+
+```bash
+git clone https://github.com/kacperchlastawa/budget-manager.git
 cd budget-manager
+```
+**2. Create and Activate a Virtual Environment**
+
