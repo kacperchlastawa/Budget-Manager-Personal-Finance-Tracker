@@ -7,6 +7,8 @@ from datetime import datetime
 from models.transaction import Income, Expense
 from services.visualization import plot_savings_progress
 from help_functions.helpers import style_savings_goals
+from services.alerts import send_savings_goal_progress
+
 
 st.set_page_config(
     page_title= "Section - Savings",
@@ -165,10 +167,12 @@ with tab1:
                             form_goal_values["description"]
                         )
                         budget.add_transaction(expense)
+                        
                         st.toast(f"Added {form_goal_values['amount']:.2f} to goal '{form_goal_values['goal_name']}' successfully!", icon="✅")
                         st.rerun()
                     else:
                         st.error("Failed to add money to the goal.")
+
 with tab2:
     saving_goals = savings.show_goals()
     if not saving_goals:

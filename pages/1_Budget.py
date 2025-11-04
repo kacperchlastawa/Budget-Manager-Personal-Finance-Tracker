@@ -9,7 +9,7 @@ from models.transaction import Income, Expense
 import pandas as pd
 from help_functions.helpers import style_dataframe
 from data.budget_db import get_categories
-
+from services.alerts import send_budget_alert, send_big_expense_alert
 budget = Budget()
 
 st.set_page_config(
@@ -111,7 +111,19 @@ with st.form(key = 'add_income_expense_form'):
                 )
                 budget.add_transaction(expense)
                 st.toast("✅ Expense added successfully!", icon="💰")
+                if form_values["amount"] > 1000:
+                    user_email = "user_email@gmail.com"  # docelowo: st.session_state["email"]
+                    send_big_expense_alert(user_email, form_values["category"], form_values["amount"])
+                    st.warning(f"💸 Large expense alert! Email sent to {user_email}")
+
+                summary = get_monthly_summary(today.year, today.month)
+                if summary["total_exp"] > summary["total_income"]:
+                    user_email = "ksw01185@gmail.com"
+                    send_budget_alert(user_email, today.month, today.year,
+                                    summary["total_exp"], summary["total_income"])
+                    st.warning("⚠️ Spending exceeds income this month! Alert email sent.")
                 st.rerun()
+
 st.divider()
 #========================
 #SHOW TRANSACTIONS

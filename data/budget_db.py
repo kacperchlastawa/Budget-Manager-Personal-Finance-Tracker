@@ -23,7 +23,7 @@ def insert_transaction(obj):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO Transactions (user_id,type,amount, date, category, description)
+        INSERT INTO Transactions (type,amount, date, category, description)
         VALUES (?,?, ?, ?, ?) 
     """, (obj.type,obj.amount, obj.t_date, obj.category, obj.description))
     conn.commit()

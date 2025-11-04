@@ -1,8 +1,8 @@
 .__pycache__/
 *.pyc
 *.pyo
-# *.db
 env/
 venv/
 notatki.txt
 ui/__pycache__
+.config/

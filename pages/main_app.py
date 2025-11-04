@@ -51,7 +51,7 @@ with st.sidebar:
     st.title(f"Hello, {st.session_state.get('name', 'User')}!")
     st.markdown("----")
 
-    st.sidebar.title("Panel informacji")
+    st.sidebar.title("Information desk")
 
     #1
     today = datetime.today()
@@ -77,7 +77,7 @@ with st.sidebar:
 
 
     st.markdown("---")
-    if st.button("🚪 Wyloguj"):
+    if st.button("🚪 Sign out"):
         st.session_state['logged_in'] = False
         st.rerun()
     

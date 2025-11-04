@@ -2,6 +2,8 @@ import sys
 import os
 import sys, os
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+import threading
+from services.automation import run_scheduler
 
 import streamlit as st
 from data.user_db import register_user, login_user, delete_user
@@ -45,6 +47,11 @@ with tab1:
                 st.session_state['username'] = user.username
                 st.session_state['name'] = user.name
                 st.success(f"Welcome back, {st.session_state['name']}!")
+                try:
+                    threading.Thread(target=run_scheduler, args=(user.email,), daemon=True).start()
+                    print(f"📅 Scheduler started for {user.email}")
+                except Exception as e:
+                    print(f"⚠️ Failed to start scheduler: {e}")
                 st.markdown("### ✅ You are logged in.")
                 st.switch_page("pages/main_app.py")
             else:
